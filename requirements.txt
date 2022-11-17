@@ -1,0 +1,16 @@
+altair==4.2.0
+astropy==5.1.1
+bokeh==2.4.3
+gwosc==0.6.1
+gwpy==3.0.0
+healpy==1.16.1
+ligo_segments==1.4.0
+matplotlib==3.5.2
+numpy==1.21.5
+pandas==1.4.3
+Pillow==9.3.0
+plotly==5.11.0
+requests==2.25.1
+scipy==1.8.1
+streamlit==1.14.1
+ligo.skymap==1.0.3
