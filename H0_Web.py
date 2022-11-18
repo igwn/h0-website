@@ -9,8 +9,8 @@ from astropy import constants as const
 from bokeh.plotting import figure
 from H0calculate import *
 ###########################################
-title= 'Latest Standard Siren Meassurement'
-st.set_page_config(page_title='$H_Website$', 
+title= 'Latest Standard Siren Measurement'
+st.set_page_config(page_title='$H_0$ Website', 
                                initial_sidebar_state='collapsed',layout="centered")
 
 
