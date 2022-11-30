@@ -60,133 +60,129 @@ sectionnames = [
 
 def headerlabel(number):
     return "{0}: {1}".format(number, sectionnames[number-1])
+st.header('PRIORS')
+c3, c4 = st.columns([3, 7])
+c3.markdown('### Prior 1 ')
+c3.markdown(r'$H_0 max=20$ ')
+c3.markdown(r'$H_0 min=140$ ')
+c3.markdown(r'$\Omega$=0.3')
+c4.markdown('### Prior 2 ')
+c4.markdown(r'$H_0 max=25$ ')
+c4.markdown(r'$H_0 min=135$ ')
+c4.markdown(r'$\Omega$=0.35')
     
-page = st.radio('Select Section:', [1,2,3], format_func=headerlabel)
+#page = st.radio('Select Section:', [1,2,3], format_func=headerlabel)
 
-st.markdown("## {}".format(headerlabel(page)))
+#st.markdown("## {}".format(headerlabel(page)))
 #Prior section
-if page==1:
-    c3, c4 = st.columns([3, 7])
-    c3.markdown('### Prior 1 ')
-    c3.markdown(r'$H_0 max=20$ ')
-    c3.markdown(r'$H_0 min=140$ ')
-    c3.markdown(r'$\Omega$=0.3')
-    c4.markdown('### Prior 2 ')
-    c4.markdown(r'$H_0 max=25$ ')
-    c4.markdown(r'$H_0 min=135$ ')
-    c4.markdown(r'$\Omega$=0.35')
- 
 
+c3, c4 = st.columns([3, 7])
+c3.markdown('### Prior 1 ')
+c3.markdown(r'$H_0 max=20$ ')
+c3.markdown(r'$H_0 min=140$ ')
+c3.markdown(r'$\Omega$=0.3')
+c4.markdown('### Prior 2 ')
+c4.markdown(r'$H_0 max=25$ ')
+c4.markdown(r'$H_0 min=135$ ')
+c4.markdown(r'$\Omega$=0.35')
 
-#Info section
-if page==2:
-   menu=["GW170817_info","GW170817_xxx"]
-   choice = st.selectbox("Menu",menu)
-   if choice == "GW170817_info":
-      image = Image.open('probability_H0_plot.png')
+#Reading csv file 
+H0likelihood_GW170817_EM1_140_20=pd.read_csv('H0_prob_H0_GW170817_EM1_140_20.csv',sep=",",engine='python')
+H0likelihood_GW170817_EM2_140_20=pd.read_csv('H0_prob_H0_GW170817_EM2_140_20.csv',sep=",",engine='python')
+H0likelihood_GW291122_EM1_140_20=pd.read_csv('H0_prob_H0_GW291122_EM1_140_20.csv',sep=",",engine='python')
+H0likelihood_GW291122_EM2_140_20=pd.read_csv('H0_prob_H0_GW291122_EM2_140_20.csv',sep=",",engine='python')
 
-      st.image(image)
-      st.markdown("This graph was generated with:")          
-      st.markdown("* GW170817.")  
-      with open("probability_H0_plot.png", "rb") as file:
-          btn = st.download_button(
-          label="Download the posterior 2",
-          data=file,
-          file_name="probability_H0_plot.png",
-          mime="image/png"
-          )
-   if choice == "GW170817_xxx":
-      image = Image.open('probability_H0_plot-1.png')
+likelihood_array_GW170817_EM1_140_20=np.array(H0likelihood_GW170817_EM1_140_20["GW170817"])
+likelihood_array_GW170817_EM2_140_20=np.array(H0likelihood_GW170817_EM2_140_20["GW170817"])
+likelihood_array_GW291122_EM1_140_20=np.array(H0likelihood_GW291122_EM1_140_20["GW170817"])
+likelihood_array_GW291122_EM2_140_20=np.array(H0likelihood_GW291122_EM2_140_20["GW170817"])
 
-      st.image(image)
-      st.markdown("This graph was generated with:")       
-      st.markdown("* GW170817xxx.")  
-      with open("probability_H0_plot.png", "rb") as file:
-          btn = st.download_button(
-          label="Download the posterior 3",
-          data=file,
-          file_name="probability_H0_plot-1.png",
-          mime="image/png"
-          )
-
-#Interactive section
-if page==3:
-
-     menu= ["GW170817_info and prior 1","GW170817_info and prior 2","GW170817_xxx and prior 1","GW170817_xxx and prior 2", "GW170817_info and GW170817xxx and prior 1"]
-     choice = st.selectbox("Menu",menu)
+H0_array_GW170817_EM1_140_20=np.array(H0likelihood_GW170817_EM1_140_20["H0_array"])
+H0_array_GW170817_EM2_140_20=np.array(H0likelihood_GW170817_EM2_140_20["H0_array"])
+H0_array_GW291122_EM1_140_20=np.array(H0likelihood_GW291122_EM1_140_20["H0_array"])
+H0_array_GW291122_EM2_140_20=np.array(H0likelihood_GW291122_EM2_140_20["H0_array"])
+#Combined
+L11=likelihood_array_GW170817_EM1_140_20*likelihood_array_GW170817_EM1_140_20
+L12=likelihood_array_GW170817_EM1_140_20*likelihood_array_GW170817_EM2_140_20
+L21=likelihood_array_GW170817_EM2_140_20*likelihood_array_GW170817_EM1_140_20
+L22=likelihood_array_GW170817_EM2_140_20*likelihood_array_GW170817_EM2_140_20
+#Normalization
+L11 /= simpson (L11,H0_array_GW170817_EM1_140_20)
+L12 /= simpson (L12,H0_array_GW170817_EM1_140_20)
+L21 /= simpson (L21,H0_array_GW170817_EM1_140_20)
+L22 /= simpson (L22,H0_array_GW170817_EM1_140_20)
+menu= ["GW170817_EM1 and GW291122_EM1","GW170817_EM1 and GW291122_EM2","GW170817_EM2 and GW291122_EM1","GW170817_EM2 and GW291122_EM2"]
+choice = st.selectbox("Menu",menu)
   
+if choice == "GW170817_EM1 and GW291122_EM1":
+    plt.plot ( H0_array_GW170817_EM1_140_20, L11)
 
-     if choice == "GW170817_info and prior 1":
-         image = Image.open('probability_H0_plot.png')
+    plt.xlim (H0_array_GW170817_EM1_140_20 [0], H0_array_GW170817_EM1_140_20 [-1])
 
-         st.image(image)
-         st.markdown("This graph was generated with:")          
-         st.markdown("* GW170817.")  
-         st.markdown("* Prior 1.")  
-         with open("probability_H0_plot.png", "rb") as file:
-             btn = st.download_button(
-             label="Download the posterior 4",
-             data=file,
-             file_name="probability_H0_plot.png",
-             mime="image/png"
-            )
+    plt.xlabel (r'$H_{0}$', size=15)
+    plt.ylabel (r'$p(H_{0})$', size=15)
 
-     if choice == "GW170817_info and prior 2":
-         image = Image.open('probability_H0_plot_1.png')
+    plt.tight_layout ()
+    p = figure(
+    title= r"$$ Meassurement of H_0$$",
+    x_axis_label=r'$$H_0$$',
+    y_axis_label=r'$$\rho(H_0)$$',width=400, height=400)
 
-         st.image(image)
-         st.markdown("This graph was generated with:")          
-         st.markdown("* GW170817.")  
-         st.markdown("* Prior 2.")  
-         with open("probability_H0_plot_1.png", "rb") as file:
-             btn = st.download_button(
-             label="Download the posterior 5",
-             data=file,
-             file_name="probability_H0_plot_1.png",
-             mime="image/png"
-            )
-     if choice == "GW170817_xxx and prior 1":
-            image = Image.open('probability_H0_plot-1.png')
+    p.line(H0_array_GW170817_EM1_140_20, L11, legend_label='Trend', line_width=2)
 
-            st.image(image)
-            st.markdown("This graph was generated with:")       
-            st.markdown("* GW170817xxx.") 
-            st.markdown("* Prior 1")  
-            with open("probability_H0_plot-1.png", "rb") as file:
-                btn = st.download_button(
-                label="Download the posterior 6",
-                data=file,
-                file_name="probability_H0_plot-1.png",
-                mime="image/png"
-                )
+    st.bokeh_chart(p, use_container_width=True)
 
-     if choice == "GW170817_xxx and prior 2":
-            image = Image.open('probability_H0_plot-1_1.png')
+if choice == "GW170817_EM1 and GW291122_EM2":
+    plt.plot ( H0_array_GW170817_EM1_140_20, L12)
 
-            st.image(image)
-            st.markdown("This graph was generated with:")       
-            st.markdown("* GW170817xxx.") 
-            st.markdown("* Prior 2")  
-            with open("probability_H0_plot-1_1.png", "rb") as file:
-                btn = st.download_button(
-                label="Download image option 6",
-                data=file,
-                file_name="probability_H0_plot-1_1.png",
-                mime="image/png"
-                )
+    plt.xlim (H0_array_GW170817_EM1_140_20 [0], H0_array_GW170817_EM1_140_20 [-1])
 
-     if choice == "GW170817_info and GW170817xxx and prior 1":
-            image = Image.open('probability_H0_plot_yyy.png')
+    plt.xlabel (r'$H_{0}$', size=15)
+    plt.ylabel (r'$p(H_{0})$', size=15)
 
-            st.image(image)
-            st.markdown("This graph was generated with:")       
-            st.markdown("* GW170817_info and GW170817xxx.") 
-            st.markdown("* Prior 1")  
-            with open("probability_H0_plot_yyy.png", "rb") as file:
-                btn = st.download_button(
-                label="Download image option 6",
-                data=file,
-                file_name="probability_H0_plot_yyy.png",
-                mime="image/png"
-                )
+    plt.tight_layout ()
+    p = figure(
+    title= r"$$ Meassurement of H_0$$",
+    x_axis_label=r'$$H_0$$',
+    y_axis_label=r'$$\rho(H_0)$$',width=400, height=400)
+
+    p.line(H0_array_GW170817_EM1_140_20, L12, legend_label='Trend', line_width=2)
+
+    st.bokeh_chart(p, use_container_width=True)
+
+if choice == "GW170817_EM2 and GW291122_EM1":
+    plt.plot ( H0_array_GW170817_EM1_140_20, L21)
+
+    plt.xlim (H0_array_GW170817_EM1_140_20 [0], H0_array_GW170817_EM1_140_20 [-1])
+
+    plt.xlabel (r'$H_{0}$', size=15)
+    plt.ylabel (r'$p(H_{0})$', size=15)
+
+    plt.tight_layout ()
+    p = figure(
+    title= r"$$ Meassurement of H_0$$",
+    x_axis_label=r'$$H_0$$',
+    y_axis_label=r'$$\rho(H_0)$$',width=400, height=400)
+
+    p.line(H0_array_GW170817_EM1_140_20, L21, legend_label='Trend', line_width=2)
+
+    st.bokeh_chart(p, use_container_width=True)
+
+if choice == "GW170817_EM2 and GW291122_EM2":
+    plt.plot ( H0_array_GW170817_EM1_140_20, L22)
+
+    plt.xlim (H0_array_GW170817_EM1_140_20 [0], H0_array_GW170817_EM1_140_20 [-1])
+
+    plt.xlabel (r'$H_{0}$', size=15)
+    plt.ylabel (r'$p(H_{0})$', size=15)
+
+    plt.tight_layout ()
+    p = figure(
+    title= r"$$ Meassurement of H_0$$",
+    x_axis_label=r'$$H_0$$',
+    y_axis_label=r'$$\rho(H_0)$$',width=400, height=400)
+
+    p.line(H0_array_GW170817_EM1_140_20, L12, legend_label='Trend', line_width=2)
+
+    st.bokeh_chart(p, use_container_width=True)
 
