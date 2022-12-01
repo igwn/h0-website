@@ -9,21 +9,9 @@ from astropy import constants as const
 from bokeh.plotting import figure
 from H0calculate import *
 ###########################################
-title= 'Latest Standard Siren Meassurement'
+title= 'Latest Standard Siren Measurement'
 st.set_page_config(page_title='$H_Website$', 
                                initial_sidebar_state='collapsed',layout="centered")
-
-
-#LOGO in the slide
-def add_logo(logo_path, width, height):
-    """Read and return a resized logo"""
-    logo = Image.open(logo_path)
-    modified_logo = logo.resize((width, height))
-    return modified_logo
-
-my_logo = add_logo(logo_path="LVK.jpg", width=290, height=200)
-st.sidebar.image(my_logo)
-
 
 
 #add LOGO
@@ -32,157 +20,50 @@ c1, c2 = st.columns([3, 6])
 c1.image('https://yt3.ggpht.com/dsz-32urUxdYKd8a6A2cnmOAo7zCXBtKFXGm_eRjRdYFkqc3IWnKhpAkjY62ATQCLVqLyH7POQ=s900-c-k-c0x00ffffff-no-rj')
 
 st.title(title)
-image = Image.open('probability_H0_plot.png')
 
-st.image(image,caption="GW170817 measurement of H0")
-
-with open("probability_H0_plot.png", "rb") as file:
-    btn = st.download_button(
-            label="Download the posterior 1",
-            data=file,
-            file_name="probability_H0_plot.png",
-            mime="image/png"
-        )
-          
-
-st.markdown("The prior is a flat prior.")
-
-
-
-
-
-
-sectionnames = [
-                'Priors',
-                'Event info and H_0 likelihood',
-                'Interactive page for events by choice',
-]
-
-def headerlabel(number):
-    return "{0}: {1}".format(number, sectionnames[number-1])
-st.header('PRIORS')
-c3, c4 = st.columns([3, 7])
-c3.markdown('### Prior 1 ')
-c3.markdown(r'$H_0 max=20$ ')
-c3.markdown(r'$H_0 min=140$ ')
-c3.markdown(r'$\Omega$=0.3')
-c4.markdown('### Prior 2 ')
-c4.markdown(r'$H_0 max=25$ ')
-c4.markdown(r'$H_0 min=135$ ')
-c4.markdown(r'$\Omega$=0.35')
-    
-#page = st.radio('Select Section:', [1,2,3], format_func=headerlabel)
-
-#st.markdown("## {}".format(headerlabel(page)))
-#Prior section
-
-c3, c4 = st.columns([3, 7])
-c3.markdown('### Prior 1 ')
-c3.markdown(r'$H_0 max=20$ ')
-c3.markdown(r'$H_0 min=140$ ')
-c3.markdown(r'$\Omega$=0.3')
-c4.markdown('### Prior 2 ')
-c4.markdown(r'$H_0 max=25$ ')
-c4.markdown(r'$H_0 min=135$ ')
-c4.markdown(r'$\Omega$=0.35')
-
+LNAME=['GW170817_EM1_140_20','GW170817_EM2_140_20','GW291122_EM1_140_20','GW291122_EM2_140_20']
+LL=[]
+for i in range(len(LNAME)):
+    LL.append(pd.read_csv(LNAME[i]+'.csv',sep=",",engine='python'))
 #Reading csv file 
-H0likelihood_GW170817_EM1_140_20=pd.read_csv('H0_prob_H0_GW170817_EM1_140_20.csv',sep=",",engine='python')
-H0likelihood_GW170817_EM2_140_20=pd.read_csv('H0_prob_H0_GW170817_EM2_140_20.csv',sep=",",engine='python')
-H0likelihood_GW291122_EM1_140_20=pd.read_csv('H0_prob_H0_GW291122_EM1_140_20.csv',sep=",",engine='python')
-H0likelihood_GW291122_EM2_140_20=pd.read_csv('H0_prob_H0_GW291122_EM2_140_20.csv',sep=",",engine='python')
+#L1=pd.read_csv('H0_prob_H0_GW170817_EM1_140_20.csv',sep=",",engine='python')
+#L2=pd.read_csv('H0_prob_H0_GW170817_EM2_140_20.csv',sep=",",engine='python')
+#L3=pd.read_csv('H0_prob_H0_GW291122_EM1_140_20.csv',sep=",",engine='python')
+#L4=pd.read_csv('H0_prob_H0_GW291122_EM2_140_20.csv',sep=",",engine='python')
+LLok=[]
+for i in range(len(LNAME)):
+    LLok.append(st.checkbox(LNAME[i]))
 
-likelihood_array_GW170817_EM1_140_20=np.array(H0likelihood_GW170817_EM1_140_20["GW170817"])
-likelihood_array_GW170817_EM2_140_20=np.array(H0likelihood_GW170817_EM2_140_20["GW170817"])
-likelihood_array_GW291122_EM1_140_20=np.array(H0likelihood_GW291122_EM1_140_20["GW170817"])
-likelihood_array_GW291122_EM2_140_20=np.array(H0likelihood_GW291122_EM2_140_20["GW170817"])
 
-H0_array_GW170817_EM1_140_20=np.array(H0likelihood_GW170817_EM1_140_20["H0_array"])
-H0_array_GW170817_EM2_140_20=np.array(H0likelihood_GW170817_EM2_140_20["H0_array"])
-H0_array_GW291122_EM1_140_20=np.array(H0likelihood_GW291122_EM1_140_20["H0_array"])
-H0_array_GW291122_EM2_140_20=np.array(H0likelihood_GW291122_EM2_140_20["H0_array"])
-#Combined
-L11=likelihood_array_GW170817_EM1_140_20*likelihood_array_GW170817_EM1_140_20
-L12=likelihood_array_GW170817_EM1_140_20*likelihood_array_GW170817_EM2_140_20
-L21=likelihood_array_GW170817_EM2_140_20*likelihood_array_GW170817_EM1_140_20
-L22=likelihood_array_GW170817_EM2_140_20*likelihood_array_GW170817_EM2_140_20
-#Normalization
-L11 /= simpson (L11,H0_array_GW170817_EM1_140_20)
-L12 /= simpson (L12,H0_array_GW170817_EM1_140_20)
-L21 /= simpson (L21,H0_array_GW170817_EM1_140_20)
-L22 /= simpson (L22,H0_array_GW170817_EM1_140_20)
-menu= ["GW170817_EM1 and GW291122_EM1","GW170817_EM1 and GW291122_EM2","GW170817_EM2 and GW291122_EM1","GW170817_EM2 and GW291122_EM2"]
-choice = st.selectbox("Menu",menu)
-  
-if choice == "GW170817_EM1 and GW291122_EM1":
-    plt.plot ( H0_array_GW170817_EM1_140_20, L11)
+#LL=[L1,L2,L3,L4]
 
-    plt.xlim (H0_array_GW170817_EM1_140_20 [0], H0_array_GW170817_EM1_140_20 [-1])
-
+def plotLL(LLok):
+    post=1
+    for i in range(len(LL)):
+        if LLok[i]==True:
+            LLI=np.array(LL[i].iloc[:,2])
+            #print(LLI)
+            post=post*LLI
+    post/=simpson(post,LL[1].iloc[:,1])
+    plt.plot (LL[1].iloc[:,1],post)
     plt.xlabel (r'$H_{0}$', size=15)
     plt.ylabel (r'$p(H_{0})$', size=15)
-
     plt.tight_layout ()
     p = figure(
-    title= r"$$ Meassurement of H_0$$",
+    title= "Available likelihoods",
     x_axis_label=r'$$H_0$$',
     y_axis_label=r'$$\rho(H_0)$$',width=400, height=400)
-
-    p.line(H0_array_GW170817_EM1_140_20, L11, legend_label='Trend', line_width=2)
-
+    p.line(LL[1].iloc[:,1],post , legend_label='Trend', line_width=2)
     st.bokeh_chart(p, use_container_width=True)
 
-if choice == "GW170817_EM1 and GW291122_EM2":
-    plt.plot ( H0_array_GW170817_EM1_140_20, L12)
 
-    plt.xlim (H0_array_GW170817_EM1_140_20 [0], H0_array_GW170817_EM1_140_20 [-1])
+if st.button('Calculate'):
+    plotLL(LLok)
 
-    plt.xlabel (r'$H_{0}$', size=15)
-    plt.ylabel (r'$p(H_{0})$', size=15)
 
-    plt.tight_layout ()
-    p = figure(
-    title= r"$$ Meassurement of H_0$$",
-    x_axis_label=r'$$H_0$$',
-    y_axis_label=r'$$\rho(H_0)$$',width=400, height=400)
+        
 
-    p.line(H0_array_GW170817_EM1_140_20, L12, legend_label='Trend', line_width=2)
 
-    st.bokeh_chart(p, use_container_width=True)
 
-if choice == "GW170817_EM2 and GW291122_EM1":
-    plt.plot ( H0_array_GW170817_EM1_140_20, L21)
 
-    plt.xlim (H0_array_GW170817_EM1_140_20 [0], H0_array_GW170817_EM1_140_20 [-1])
-
-    plt.xlabel (r'$H_{0}$', size=15)
-    plt.ylabel (r'$p(H_{0})$', size=15)
-
-    plt.tight_layout ()
-    p = figure(
-    title= r"$$ Meassurement of H_0$$",
-    x_axis_label=r'$$H_0$$',
-    y_axis_label=r'$$\rho(H_0)$$',width=400, height=400)
-
-    p.line(H0_array_GW170817_EM1_140_20, L21, legend_label='Trend', line_width=2)
-
-    st.bokeh_chart(p, use_container_width=True)
-
-if choice == "GW170817_EM2 and GW291122_EM2":
-    plt.plot ( H0_array_GW170817_EM1_140_20, L22)
-
-    plt.xlim (H0_array_GW170817_EM1_140_20 [0], H0_array_GW170817_EM1_140_20 [-1])
-
-    plt.xlabel (r'$H_{0}$', size=15)
-    plt.ylabel (r'$p(H_{0})$', size=15)
-
-    plt.tight_layout ()
-    p = figure(
-    title= r"$$ Meassurement of H_0$$",
-    x_axis_label=r'$$H_0$$',
-    y_axis_label=r'$$\rho(H_0)$$',width=400, height=400)
-
-    p.line(H0_array_GW170817_EM1_140_20, L12, legend_label='Trend', line_width=2)
-
-    st.bokeh_chart(p, use_container_width=True)
 
