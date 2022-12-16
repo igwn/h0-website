@@ -7,7 +7,8 @@ import plotly.figure_factory as ff
 import streamlit as st
 from astropy import constants as const
 from bokeh.plotting import figure
-from H0calculate import *
+from H0live import *
+
 ###########################################
 title= 'Latest Standard Siren Measurement'
 st.set_page_config(page_title='$H_Website$', 
@@ -21,40 +22,41 @@ c1.image('https://yt3.ggpht.com/dsz-32urUxdYKd8a6A2cnmOAo7zCXBtKFXGm_eRjRdYFkqc3
 
 st.title(title)
 
-LNAME=['GW170817_EM1_140_20','GW170817_EM2_140_20','GW291122_EM1_140_20','GW291122_EM2_140_20']
-LL=[]
-for i in range(len(LNAME)):
-    LL.append(pd.read_csv(LNAME[i]+'.csv',sep=",",engine='python'))
-#Reading csv file 
-#L1=pd.read_csv('H0_prob_H0_GW170817_EM1_140_20.csv',sep=",",engine='python')
-#L2=pd.read_csv('H0_prob_H0_GW170817_EM2_140_20.csv',sep=",",engine='python')
-#L3=pd.read_csv('H0_prob_H0_GW291122_EM1_140_20.csv',sep=",",engine='python')
-#L4=pd.read_csv('H0_prob_H0_GW291122_EM2_140_20.csv',sep=",",engine='python')
+def list_events(csv_file):
+    ev1=pd.read_csv(csv_file,sep=",",engine='python')
+    return ev1.columns[1:].values.tolist()
+#Menu
+ev1_list=list_events('test.csv')
+
+
+st.header('Events')
 LLok=[]
-for i in range(len(LNAME)):
-    LLok.append(st.checkbox(LNAME[i]))
+for i in range(len(ev1_list)):
+    LLok.append(st.checkbox(ev1_list[i]))
 
 
-#LL=[L1,L2,L3,L4]
+prior_list=['uniform', 'log']
+choice = st.selectbox("Priors",prior_list)        
+
 
 def plotLL(LLok):
-    post=1
-    for i in range(len(LL)):
+    choice_list=[]
+    for i in range(len(LLok)):
         if LLok[i]==True:
-            LLI=np.array(LL[i].iloc[:,2])
-            #print(LLI)
-            post=post*LLI
-    post/=simpson(post,LL[1].iloc[:,1])
-    plt.plot (LL[1].iloc[:,1],post)
-    plt.xlabel (r'$H_{0}$', size=15)
-    plt.ylabel (r'$p(H_{0})$', size=15)
-    plt.tight_layout ()
-    p = figure(
-    title= "Available likelihoods",
-    x_axis_label=r'$$H_0$$',
-    y_axis_label=r'$$\rho(H_0)$$',width=400, height=400)
-    p.line(LL[1].iloc[:,1],post , legend_label='Trend', line_width=2)
-    st.bokeh_chart(p, use_container_width=True)
+            choice_list.append(ev1_list[i])
+            
+    if choice== 'uniform' or 'log':
+        h0c= H0live(choice_list, choice)
+        image = Image.open('H0_combined_posterior.png')
+        st.image(image)  
+        with open('H0_combined_posterior.png', "rb") as file:
+            btn = st.download_button(
+            label="Download image",
+            data=file,
+            file_name="'H0_combined_posterior.png'",
+            mime="image/png"
+            )
+
 
 
 if st.button('Calculate'):
@@ -62,7 +64,6 @@ if st.button('Calculate'):
 
 
         
-
 
 
 
