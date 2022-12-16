@@ -38,13 +38,13 @@ for i in range(len(ev1_list)):
 prior_list=['uniform', 'log']
 choice = st.selectbox("Priors",prior_list)        
 
-
+#H0live action
 def plotLL(LLok):
     choice_list=[]
     for i in range(len(LLok)):
         if LLok[i]==True:
             choice_list.append(ev1_list[i])
-            
+
     if choice== 'uniform' or 'log':
         h0c= H0live(choice_list, choice)
         image = Image.open('H0_combined_posterior.png')
