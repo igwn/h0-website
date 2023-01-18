@@ -15,7 +15,7 @@ st.set_page_config(page_title='$H_Website$',
                                initial_sidebar_state='collapsed',layout="centered")
 
 
-#add LOGO
+#add LOGO.
 c1, c2 = st.columns([3, 6])
 
 c1.image('https://yt3.ggpht.com/dsz-32urUxdYKd8a6A2cnmOAo7zCXBtKFXGm_eRjRdYFkqc3IWnKhpAkjY62ATQCLVqLyH7POQ=s900-c-k-c0x00ffffff-no-rj')
