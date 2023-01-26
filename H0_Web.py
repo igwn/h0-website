@@ -12,8 +12,10 @@ from H0live import *
 ###########################################
 title= 'Latest Standard Siren Measurement'
 st.set_page_config(page_title='$H_Website$', 
-                               initial_sidebar_state='collapsed',layout="centered")
+                               initial_sidebar_state= 'expanded',layout="centered")
 
+if 'image' not in st.session_state:
+    st.session_state.image = None
 
 #add LOGO.
 c1, c2 = st.columns([3, 6])
@@ -48,23 +50,30 @@ def plotLL(LLok):
     if choice== 'uniform' or 'log':
         h0c= H0live(choice_list, choice)
         image = Image.open('H0_combined_posterior.png')
-        st.image(image)  
-        with open('H0_combined_posterior.png', "rb") as file:
-            btn = st.download_button(
-            label="Download image",
-            data=file,
-            file_name="'H0_combined_posterior.png'",
-            mime="image/png"
-            )
+        st.session_state.image = image
 
 
 
 if st.button('Calculate'):
     plotLL(LLok)
 
+if st.session_state.image is not None:
+    st.image(st.session_state.image)
 
-        
+with open('H0_combined_posterior.png', "rb") as file:
+    btn = st.download_button(
+    label="Download image",
+    data=file,
+    file_name="'H0_combined_posterior.png'",
+    mime="image/png"
+    )       
 
 
+sb = st.sidebar
+sb.header("Related information")
+sb.markdown("About gravitational wave events: [GraceDB](https://gracedb.ligo.org/)")
+sb.markdown(
+    "What is LIGO?: [LIGO](https://www.ligo.org/about.php)")
 
-
+sb.markdown(
+    "How can GW be used to estimate H0? : [Measuring the Expansion of the Universe with Gravitational Waves](https://www.ligo.org/science/Publication-GW170817Hubble/)")
