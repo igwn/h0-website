@@ -71,7 +71,7 @@ with open('H0_combined_posterior.png', "rb") as file:
 
 sb = st.sidebar
 sb.header("Related information")
-sb.markdown("About gravitational wave events: [GraceDB](https://gracedb.ligo.org/api/)")
+sb.markdown("About gravitational wave events: [GraceDB](https://gracedb.ligo.org/api/events/)")
 sb.markdown(
     "What is LIGO?: [LIGO](https://www.ligo.org/about.php)")
 
