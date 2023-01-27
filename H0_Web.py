@@ -11,7 +11,7 @@ from H0live import *
 
 ###########################################
 title= 'Latest Standard Siren Measurement'
-st.set_page_config(page_title='$H_Website$', 
+st.set_page_config(page_title=r'$H_Website$', 
                                initial_sidebar_state= 'expanded',layout="centered")
 
 if 'image' not in st.session_state:
@@ -71,7 +71,7 @@ with open('H0_combined_posterior.png', "rb") as file:
 
 sb = st.sidebar
 sb.header("Related information")
-sb.markdown("About gravitational wave events: [GraceDB](https://gracedb.ligo.org/api/'")
+sb.markdown("About gravitational wave events: [GraceDB](https://gracedb.ligo.org/api/)")
 sb.markdown(
     "What is LIGO?: [LIGO](https://www.ligo.org/about.php)")
 
