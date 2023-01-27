@@ -68,7 +68,7 @@ with open('H0_combined_posterior.png', "rb") as file:
     mime="image/png"
     )       
 
-
+# Sidebar
 sb = st.sidebar
 sb.header("Related information")
 sb.markdown("About gravitational wave events: [GraceDB](https://gracedb.ligo.org/api/events/)")
