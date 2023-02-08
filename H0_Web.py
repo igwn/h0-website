@@ -27,36 +27,56 @@ st.title(title)
 def list_events(csv_file):
     ev1=pd.read_csv(csv_file,sep=",",engine='python')
     return ev1.columns[1:].values.tolist()
-#Menu
+#Menu. Separate events from counterparties
 ev1_list=list_events('test.csv')
 
-
-st.header('Events')
-LLok=[]
+LLo=[]
 for i in range(len(ev1_list)):
-    LLok.append(st.checkbox(ev1_list[i]))
+    if ev1_list[i][0:8] not in LLo:
+        LLo.append(ev1_list[i][0:8])
+ctp=[]
+for i in range(len(ev1_list)):
+    if ev1_list[i][9:12] not in ctp:
+        ctp.append(ev1_list[i][9:12])
+LLok=[]
+col1, col2 = st.columns(2)
+#Column to select events
+with col1:
+    st.header('Events')
+    for i in range(len(LLo)):
+         LLok.append(st.checkbox(LLo[i]))
 
+stb_list=[]
+#Column to select counterparts 
+with col2:
+    for i in range(len(LLok)):
+        ctp_list=[]
+        for x in range(len(ctp)):
+            if LLo[i]+"_"+ctp[x] in ev1_list:
+                ctp_list.append(ctp[x])
+        stb_list.append(st.selectbox("Counterpart "+str(i+1),ctp_list,key=str(i+1)))
 
+#To select the desired prior
 prior_list=['uniform', 'log']
-choice = st.selectbox("Priors",prior_list)        
+choice = st.selectbox("Priors",prior_list) 
+
 
 #H0live action
-def plotLL(LLok):
-    choice_list=[]
-    for i in range(len(LLok)):
-        if LLok[i]==True:
-            choice_list.append(ev1_list[i])
+choice_list1=[]
+for i in range(len(LLok)):
+    if LLok[i]==True:
+        choice_list1.append(LLo[i]+"_"+stb_list[i])
 
+def plotLL(choice_list1):
     if choice== 'uniform' or 'log':
-        h0c= H0live(choice_list, choice)
+        h0c= H0live(choice_list1, choice)
         image = Image.open('H0_combined_posterior.png')
         st.session_state.image = image
 
-
-
 if st.button('Calculate'):
-    plotLL(LLok)
+    plotLL(choice_list1)
 
+#For the graph 
 if st.session_state.image is not None:
     st.image(st.session_state.image)
 
