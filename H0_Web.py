@@ -42,7 +42,6 @@ LLok=[]
 col1, col2 = st.columns(2)
 #Column to select events
 with col1:
-    st.header('Events')
     for i in range(len(LLo)):
          LLok.append(st.checkbox(LLo[i]))
 
@@ -54,7 +53,7 @@ with col2:
         for x in range(len(ctp)):
             if LLo[i]+"_"+ctp[x] in ev1_list:
                 ctp_list.append(ctp[x])
-        stb_list.append(st.selectbox("Counterpart "+str(i+1),ctp_list,key=str(i+1)))
+        stb_list.append(st.selectbox("Counterpart "+str(i+1),ctp_list,key=str(i+1),label_visibility="collapsed"))
 
 #To select the desired prior
 prior_list=['uniform', 'log']
