@@ -10,6 +10,11 @@ from scipy.integrate import simpson, cumtrapz
 import matplotlib.pyplot as plt
 from scipy.optimize import fmin
 from scipy.interpolate import interp1d, UnivariateSpline
+import streamlit as st
+from matplotlib.backends.backend_agg import RendererAgg
+
+
+_lock = RendererAgg.lock
 
 
 class H0live :
@@ -37,22 +42,23 @@ class H0live :
 
 
         # plot
-        plt.plot (self.H0_array, pH0_normalized, lw=2.5, color="darkred", label="Combined Posterior")
-        plt.plot (self.H0_array, self.prior(), ls="--", color="darkslategray", lw=2, alpha=0.8, label="Prior")
-        plt.axvline (H0map, color='k', lw=2, alpha=0.7)
-        plt.axvline (H0low, color='k', lw=2, alpha=0.7)
-        plt.axvline (H0high, color='k', lw=2, alpha=0.7)
+        with _lock :
+            fig = plt.figure()
+            plt.plot (self.H0_array, pH0_normalized, lw=2.5, color="darkred", label="Combined Posterior")
+            plt.plot (self.H0_array, self.prior(), ls="--", color="darkslategray", lw=2, alpha=0.8, label="Prior")
+            plt.axvline (H0map, color='k', lw=2, alpha=0.7)
+            plt.axvline (H0low, color='k', lw=2, alpha=0.7)
+            plt.axvline (H0high, color='k', lw=2, alpha=0.7)
         
-        plt.xlim (self.H0_array[0],self.H0_array[-1])
-        plt.xlabel (r"$H_{0}$", size=15)
-        plt.ylabel (r"$p(H_{0})$", size=15)
-        plt.title (r"$H_{0}=%.2f^{+%.2f}_{+%.2f}\ {\rm km\ s^{-1}\ Mpc^{-1}} (%d %s {\rm CI})$"
+            plt.xlim (self.H0_array[0],self.H0_array[-1])
+            plt.xlabel (r"$H_{0}$", size=15)
+            plt.ylabel (r"$p(H_{0})$", size=15)
+            plt.title (r"$H_{0}=%.2f^{+%.2f}_{+%.2f}\ {\rm km\ s^{-1}\ Mpc^{-1}} (%d %s {\rm CI})$"
         %(H0map, H0high-H0map, H0map-H0low, level*100, r"$%$"))
-        plt.tick_params(labelsize=12, direction='in')
-        plt.legend (fontsize=11)
-        plt.tight_layout ()
-        plt.savefig ("H0_combined_posterior")
-        plt.close ()
+            plt.tick_params(labelsize=12, direction='in')
+            plt.legend (fontsize=11)
+            plt.tight_layout ()
+            st.pyplot(fig, clear_figure=True)
 
     def probability (self) :
 
