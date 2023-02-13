@@ -13,6 +13,7 @@ from H0live import *
 title= 'Latest Standard Siren Measurement'
 st.set_page_config(page_title=r'$H_Website$', 
                                initial_sidebar_state= 'expanded',layout="centered")
+sb = st.sidebar
 
 if 'image' not in st.session_state:
     st.session_state.image = None
@@ -39,21 +40,20 @@ for i in range(len(ev1_list)):
     if ev1_list[i][9:12] not in ctp:
         ctp.append(ev1_list[i][9:12])
 LLok=[]
-col1, col2 = st.columns(2)
-#Column to select events
-with col1:
-    for i in range(len(LLo)):
-         LLok.append(st.checkbox(LLo[i]))
+
+sb.header("Events")
+for i in range(len(LLo)):
+    LLok.append(st.sidebar.checkbox(LLo[i]))
 
 stb_list=[]
-#Column to select counterparts 
-with col2:
-    for i in range(len(LLok)):
-        ctp_list=[]
-        for x in range(len(ctp)):
-            if LLo[i]+"_"+ctp[x] in ev1_list:
-                ctp_list.append(ctp[x])
-        stb_list.append(st.selectbox("Counterpart "+str(i+1),ctp_list,key=str(i+1),label_visibility="collapsed"))
+
+
+for i in range(len(LLok)):
+    ctp_list=[]
+    for x in range(len(ctp)):
+        if LLo[i]+"_"+ctp[x] in ev1_list:
+            ctp_list.append(ctp[x])
+    stb_list.append(st.selectbox("Counterpart "+str(i+1),ctp_list,key=str(i+1),label_visibility="collapsed"))
 
 #To select the desired prior
 prior_list=['uniform', 'log']
@@ -88,7 +88,6 @@ with open('H0_combined_posterior.png', "rb") as file:
     )       
 
 # Sidebar
-sb = st.sidebar
 sb.header("Related information")
 sb.markdown("About gravitational wave events: [GraceDB](https://gracedb.ligo.org/api/events/)")
 sb.markdown(
