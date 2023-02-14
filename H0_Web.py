@@ -15,8 +15,8 @@ st.set_page_config(page_title=r'$H_Website$',
                                initial_sidebar_state= 'expanded',layout="centered")
 sb = st.sidebar
 
-if 'image' not in st.session_state:
-    st.session_state.image = None
+#if 'image' not in st.session_state:
+ #   st.session_state.image = None
 
 #add LOGO.
 c1, c2 = st.columns([3, 6])
@@ -43,7 +43,9 @@ LLok=[]
 
 sb.header("Events")
 for i in range(len(LLo)):
-    LLok.append(st.sidebar.checkbox(LLo[i]))
+    default_value=LLo[0]
+    LLok.append(st.sidebar.checkbox(LLo[i],value=default_value))
+    
 
 stb_list=[]
 
