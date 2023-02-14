@@ -10,6 +10,7 @@ from H0live import *
 if 'image' not in st.session_state:
     st.session_state.image = None
 
+
 ###########################################
 title= 'Latest Standard Siren Measurement'
 st.set_page_config(page_title=r'$H_Website$', 
@@ -25,13 +26,10 @@ c1.image('https://yt3.ggpht.com/dsz-32urUxdYKd8a6A2cnmOAo7zCXBtKFXGm_eRjRdYFkqc3
 
 st.title(title)
 
-#def list_events(csv_file):
- #   ev1=pd.read_csv(csv_file,sep=",",engine='python')
-  #  return ev1.columns[1:].values.tolist()
-@st.experimental_memo
 def list_events(csv_file):
-    evl=pd.read_csv(csv_file, sep=",",engine='python')
-    return evl.columns[1:].values.tolist()
+    ev1=pd.read_csv(csv_file,sep=",",engine='python')
+    return ev1.columns[1:].values.tolist()
+
 
 evl_list = list_events('test.csv')
 #Menu. Separate events from counterparties
@@ -79,21 +77,24 @@ for i in range(len(LLok)):
 def plotLL(choice_list1):
     if choice== 'uniform' or 'log':
         h0c= H0live(choice_list1, choice)
-        image = Image.open('H0_combined_posterior.png')
-        st.session_state.image = image
+        #image = Image.open('H0_combined_posterior.png')
+        #st.session_state.image = image
 
 
-    
+
+#if st.session_state.image is not None:
+ #   st.image(st.session_state.image)   
 
 if st.button('Calculate'):
     plotLL(choice_list1)
 
 #For the graph 
-if st.session_state.image is not None:
-    st.image(st.session_state.image)
 
+#if st.session_state.image is True:
+ #   st.image(st.session_state.image)
 
-
+if 'image'  in st.session_state:
+    st.session_state.image = True
 with open('H0_combined_posterior.png', "rb") as file:
     btn = st.download_button(
     label="Download image",
@@ -102,6 +103,8 @@ with open('H0_combined_posterior.png', "rb") as file:
     mime="image/png"
     )       
 
+if 'image'  in st.session_state:
+    st.session_state.image = False
 # Sidebar
 sb.header("Related information")
 sb.markdown("About gravitational wave events: [GraceDB](https://gracedb.ligo.org/api/events/)")
