@@ -7,8 +7,10 @@ import plotly.figure_factory as ff
 import streamlit as st
 from astropy import constants as const
 from H0live import *
+
 if 'image' not in st.session_state:
     st.session_state.image = None
+
 
 
 ###########################################
@@ -25,7 +27,7 @@ c1, c2 = st.columns([3, 6])
 c1.image('https://yt3.ggpht.com/dsz-32urUxdYKd8a6A2cnmOAo7zCXBtKFXGm_eRjRdYFkqc3IWnKhpAkjY62ATQCLVqLyH7POQ=s900-c-k-c0x00ffffff-no-rj')
 
 st.title(title)
-
+@st.experimental_memo 
 def list_events(csv_file):
     ev1=pd.read_csv(csv_file,sep=",",engine='python')
     return ev1.columns[1:].values.tolist()
@@ -66,7 +68,9 @@ prior_list=['uniform', 'log']
 choice = st.selectbox("Priors",prior_list) 
 
 
+
 #H0live action
+
 choice_list1=[]
 for i in range(len(LLok)):
     if LLok[i]==True:
@@ -77,37 +81,26 @@ for i in range(len(LLok)):
 def plotLL(choice_list1):
     if choice== 'uniform' or 'log':
         h0c= H0live(choice_list1, choice)
-        #image = Image.open('H0_combined_posterior.png')
-        #st.session_state.image = image
+        image=h0c
 
 
 
-#if st.session_state.image is not None:
- #   st.image(st.session_state.image)   
 
-if st.button('Calculate'):
+if st.button("Calculate")==True :
     plotLL(choice_list1)
 
-#For the graph 
-
-#if st.session_state.image is True:
- #   st.image(st.session_state.image)
-
-if 'image'  in st.session_state:
-    st.session_state.image = True
-#with open('H0_combined_posterior.png', "rb") as file:
- #   btn = st.download_button(
-  #  label="Download image",
-   # data=file,
-    #file_name="'H0_combined_posterior.png'",
-    #mime="image/png"
-    #)       
-
+if st.session_state.image is not None:
+    st.image(st.session_state.image)
     
 
 
-if 'image'  in st.session_state:
-    st.session_state.image = False
+
+
+
+#For the graph 
+
+
+
 # Sidebar
 sb.header("Related information")
 sb.markdown("About gravitational wave events: [GraceDB](https://gracedb.ligo.org/api/events/)")
