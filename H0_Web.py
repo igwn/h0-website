@@ -95,13 +95,16 @@ if st.button('Calculate'):
 
 if 'image'  in st.session_state:
     st.session_state.image = True
-with open('H0_combined_posterior.png', "rb") as file:
-    btn = st.download_button(
-    label="Download image",
-    data=file,
-    file_name="'H0_combined_posterior.png'",
-    mime="image/png"
-    )       
+#with open('H0_combined_posterior.png', "rb") as file:
+ #   btn = st.download_button(
+  #  label="Download image",
+   # data=file,
+    #file_name="'H0_combined_posterior.png'",
+    #mime="image/png"
+    #)       
+
+    
+
 
 if 'image'  in st.session_state:
     st.session_state.image = False
