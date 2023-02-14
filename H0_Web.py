@@ -7,7 +7,8 @@ import plotly.figure_factory as ff
 import streamlit as st
 from astropy import constants as const
 from H0live import *
-
+if 'image' not in st.session_state:
+    st.session_state.image = None
 
 ###########################################
 title= 'Latest Standard Siren Measurement'
@@ -73,21 +74,25 @@ for i in range(len(LLok)):
     if LLok[i]==True:
         choice_list1.append(LLo[i]+"_"+stb_list[i])
 
+
+
 def plotLL(choice_list1):
     if choice== 'uniform' or 'log':
         h0c= H0live(choice_list1, choice)
         image = Image.open('H0_combined_posterior.png')
         st.session_state.image = image
 
+
+    
+
 if st.button('Calculate'):
     plotLL(choice_list1)
 
 #For the graph 
-if 'image' not in st.session_state:
-    st.session_state.image = None
-    
 if st.session_state.image is not None:
     st.image(st.session_state.image)
+
+
 
 with open('H0_combined_posterior.png', "rb") as file:
     btn = st.download_button(
