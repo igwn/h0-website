@@ -58,6 +58,9 @@ class H0live :
             plt.tick_params(labelsize=12, direction='in')
             plt.legend (fontsize=11)
             plt.tight_layout ()
+            plt.savefig ("H0_combined_posterior")
+
+
             st.pyplot(fig, clear_figure=True)
 
     def probability (self) :

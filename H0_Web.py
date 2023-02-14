@@ -15,8 +15,7 @@ st.set_page_config(page_title=r'$H_Website$',
                                initial_sidebar_state= 'expanded',layout="centered")
 sb = st.sidebar
 
-#if 'image' not in st.session_state:
- #   st.session_state.image = None
+
 
 #add LOGO.
 c1, c2 = st.columns([3, 6])
@@ -25,9 +24,15 @@ c1.image('https://yt3.ggpht.com/dsz-32urUxdYKd8a6A2cnmOAo7zCXBtKFXGm_eRjRdYFkqc3
 
 st.title(title)
 
+#def list_events(csv_file):
+ #   ev1=pd.read_csv(csv_file,sep=",",engine='python')
+  #  return ev1.columns[1:].values.tolist()
+@st.experimental_memo
 def list_events(csv_file):
-    ev1=pd.read_csv(csv_file,sep=",",engine='python')
-    return ev1.columns[1:].values.tolist()
+    evl=pd.read_csv(csv_file, sep=",",engine='python')
+    return evl.columns[1:].values.tolist()
+
+evl_list = list_events('test.csv')
 #Menu. Separate events from counterparties
 ev1_list=list_events('test.csv')
 
@@ -78,6 +83,9 @@ if st.button('Calculate'):
     plotLL(choice_list1)
 
 #For the graph 
+if 'image' not in st.session_state:
+    st.session_state.image = None
+    
 if st.session_state.image is not None:
     st.image(st.session_state.image)
 
