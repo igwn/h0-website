@@ -40,7 +40,7 @@ for i in range(len(evl_list)):
 LLo=[]
 LLok=[]
 stb_list=[]
-sb.header("Events")
+sb.header("Events and counterparts")
 for key in dictionary:
     LLok.append(st.sidebar.checkbox(key,value=key))
     LLo.append(key)
