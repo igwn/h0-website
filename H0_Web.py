@@ -8,11 +8,6 @@ import streamlit as st
 from astropy import constants as const
 from H0live import *
 
-if 'image' not in st.session_state:
-    st.session_state.image = None
-
-
-
 ###########################################
 title= 'Latest Standard Siren Measurement'
 st.set_page_config(page_title=r'$H_Website$', 
@@ -34,72 +29,43 @@ def list_events(csv_file):
 
 
 evl_list = list_events('test.csv')
-#Menu. Separate events from counterparties
-ev1_list=list_events('test.csv')
+
+dictionary={}
+for i in range(len(evl_list)):
+    if evl_list[i].split('_')[0] in dictionary:
+        dictionary[evl_list[i].split('_')[0]].append(evl_list[i].split('_')[1])
+    else:
+        dictionary[evl_list[i].split('_')[0]]=[evl_list[i].split('_')[1]]
 
 LLo=[]
-for i in range(len(ev1_list)):
-    if ev1_list[i][0:8] not in LLo:
-        LLo.append(ev1_list[i][0:8])
-ctp=[]
-for i in range(len(ev1_list)):
-    if ev1_list[i][9:12] not in ctp:
-        ctp.append(ev1_list[i][9:12])
 LLok=[]
-
-sb.header("Events")
-for i in range(len(LLo)):
-    default_value=LLo[0]
-    LLok.append(st.sidebar.checkbox(LLo[i],value=default_value))
-    
-
 stb_list=[]
+sb.header("Events")
+for key in dictionary:
+    LLok.append(st.sidebar.checkbox(key,value=key))
+    LLo.append(key)
+    stb_list.append(st.sidebar.selectbox("Counterpart ",dictionary[key],key=key,label_visibility="collapsed"))
 
-
-for i in range(len(LLok)):
-    ctp_list=[]
-    for x in range(len(ctp)):
-        if LLo[i]+"_"+ctp[x] in ev1_list:
-            ctp_list.append(ctp[x])
-    stb_list.append(st.selectbox("Counterpart "+str(i+1),ctp_list,key=str(i+1),label_visibility="collapsed"))
 
 #To select the desired prior
 prior_list=['uniform', 'log']
-choice = st.selectbox("Priors",prior_list) 
-
-
+choice = st.sidebar.selectbox("Priors",prior_list) 
 
 #H0live action
 
 choice_list1=[]
 for i in range(len(LLok)):
     if LLok[i]==True:
-        choice_list1.append(LLo[i]+"_"+stb_list[i])
+        choice_list1.append(str(LLo[i])+"_"+str(stb_list[i]))
 
 
 
 def plotLL(choice_list1):
     if choice== 'uniform' or 'log':
         h0c= H0live(choice_list1, choice)
-        image=h0c
-
-
-
-
-if st.button("Calculate")==True :
-    plotLL(choice_list1)
-
-if st.session_state.image is not None:
-    st.image(st.session_state.image)
-    
-
-
-
-
-
-#For the graph 
-
-
+        
+   
+plotLL(choice_list1)
 
 # Sidebar
 sb.header("Related information")
