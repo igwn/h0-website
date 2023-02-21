@@ -9,6 +9,8 @@ from astropy import constants as const
 from H0live import *
 
 ###########################################
+
+
 title= 'Latest Standard Siren Measurement'
 st.set_page_config(page_title=r'$H_Website$', 
                                initial_sidebar_state= 'expanded',layout="centered")
@@ -42,9 +44,10 @@ LLok=[]
 stb_list=[]
 sb.header("Events and counterparts")
 for key in dictionary:
-    LLok.append(st.sidebar.checkbox(key,value=key))
+    LLok.append(st.sidebar.checkbox(key))
     LLo.append(key)
     stb_list.append(st.sidebar.selectbox("Counterpart ",dictionary[key],key=key,label_visibility="collapsed"))
+ 
 
 
 #To select the desired prior
@@ -59,13 +62,17 @@ for i in range(len(LLok)):
         choice_list1.append(str(LLo[i])+"_"+str(stb_list[i]))
 
 
-
+if choice_list1==[]:
+    choice_list1.append(str(LLo[0])+"_"+str(stb_list[0]))
 def plotLL(choice_list1):
     if choice== 'uniform' or 'log':
         h0c= H0live(choice_list1, choice)
         
    
 plotLL(choice_list1)
+
+#if 'image' not in st.session_state:
+ #   st.markdown("Please choice options")
 
 # Sidebar
 sb.header("Related information")
