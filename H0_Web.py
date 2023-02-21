@@ -80,3 +80,34 @@ sb.markdown(
 
 sb.markdown(
     "How can GW be used to estimate H0? : [Measuring the Expansion of the Universe with Gravitational Waves](https://www.ligo.org/science/Publication-GW170817Hubble/)")
+
+
+st.subheader("User instructions")
+
+st.markdown("""Through this web page you will be able to estimate live the posterior combined 
+            H0 from the pre-calculated likelihood. In the left side bar you will be able to 
+            choose the different gravitational wave events and their respective electromagnetic 
+            counterparts (EM). You can view results for individual events or combine them""")
+
+st.subheader("Version summary:")
+st.markdown("""
+
+* altair 4.2.0
+* astropy 5.1.1
+* bokeh 2.4.3
+* gwosc 0.6.1
+* gwpy 3.0.0
+* healpy 1.16.1
+* ligo_segments 1.4.0
+* matplotlib 3.5.2
+* numpy 1.21.5
+* pandas 1.4.3
+* Pillow 9.3.0
+* plotly 5.11.0
+* requests 2.25.1
+* scipy 1.8.1
+* streamlit 1.14.1
+* ligo.skymap 1.0.3
+
+
+""")
