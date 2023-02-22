@@ -17,7 +17,7 @@ from H0live import *
 ###########################################
 
 title= 'Latest Standard Siren Measurement'
-st.set_page_config(page_title=r'$H_Website$', 
+st.set_page_config(page_title=r"""$H_0$Website""", 
                                initial_sidebar_state= 'expanded',layout="centered")
 sb = st.sidebar
 
@@ -74,7 +74,10 @@ plotLL(choice_list1)
 
 # Sidebar
 sb.header("Related information")
-sb.markdown("About gravitational wave events: [GraceDB](https://gracedb.ligo.org/api/events/)")
+sb.subheader("What is $H_0$?")
+sb.markdown(r"""$H_0$ is a cosmological parameter which measure 
+             the speed of the expansion of the Universe""")
+#sb.markdown("About gravitational wave events: [GraceDB](https://gracedb.ligo.org/api/events/)")
 sb.markdown(
     "What is LIGO?: [LIGO](https://www.ligo.org/about.php)")
 
@@ -82,32 +85,13 @@ sb.markdown(
     "How can GW be used to estimate H0? : [Measuring the Expansion of the Universe with Gravitational Waves](https://www.ligo.org/science/Publication-GW170817Hubble/)")
 
 
-st.subheader("User instructions")
-
-st.markdown("""Through this web page you will be able to estimate live the posterior combined 
-            H0 from the pre-calculated likelihood. In the left side bar you will be able to 
-            choose the different gravitational wave events and their respective electromagnetic 
-            counterparts (EM). You can view results for individual events or combine them""")
-
-st.subheader("Version summary:")
-st.markdown("""
-
-* altair 4.2.0
-* astropy 5.1.1
-* bokeh 2.4.3
-* gwosc 0.6.1
-* gwpy 3.0.0
-* healpy 1.16.1
-* ligo_segments 1.4.0
-* matplotlib 3.5.2
-* numpy 1.21.5
-* pandas 1.4.3
-* Pillow 9.3.0
-* plotly 5.11.0
-* requests 2.25.1
-* scipy 1.8.1
-* streamlit 1.14.1
-* ligo.skymap 1.0.3
 
 
-""")
+st.subheader("How to use the H0 calculator?")
+st.markdown("""On the left you can choose which gravitational wave event and 
+              corresponding electromagnetic counterpart  to use to estimate H0. 
+              Once you have selected the GW events with the checkbox, for GW events with more than 
+              one EM counterpart, you can choose between the different counterparts using the dropdown 
+              menu.
+              The plot shows the posterior obtained from combining the different 
+              likelihoods corresponding to the GW event EM counterpart combinations you have chosen.""")
