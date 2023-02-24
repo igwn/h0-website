@@ -77,6 +77,13 @@ sb.header("Related information")
 sb.subheader("What is $H_0$?")
 sb.markdown(r"""$H_0$ is a cosmological parameter which measure 
              the speed of the expansion of the Universe""")
+
+sb.subheader("How can we  estimate $H_0$ with bright sirens?")
+sb.markdown(r"""
+Bright sirens are astrophysical systems producing detectable electromagnetic (EM) and gravitational waves (GW), allowing to estimate their redshift, using EM observations, and distance, using GW observations.
+At low redshift H_0 is approximately the inverse of slope of the distance-redshift relation, also known as the Hubble diagram.
+
+                 """)
 #sb.markdown("About gravitational wave events: [GraceDB](https://gracedb.ligo.org/api/events/)")
 sb.markdown(
     "What is LIGO?: [LIGO](https://www.ligo.org/about.php)")
