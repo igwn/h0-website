@@ -47,11 +47,11 @@ class H0live :
 	
         with _lock :
             fig = plt.figure()
-            plt.plot (self.H0_array, pH0_normalized, lw=2.5, color="darkred", label="Combined Posterior")
-            plt.plot (self.H0_array, self.prior(), ls="--", color="darkslategray", lw=2, alpha=0.8, label="Prior")
-            plt.axvline (H0map, color='k', lw=2, alpha=0.7)
-            plt.axvline (H0low, color='k', lw=2, alpha=0.7)
-            plt.axvline (H0high, color='k', lw=2, alpha=0.7)
+            plt.plot (self.H0_array, pH0_normalized, lw=2.5, color=c[0], label="Combined Posterior")
+            plt.plot (self.H0_array, self.prior(), ls="--", color=c[1], lw=2, alpha=0.8, label="Prior")
+            plt.axvline (H0map, color=c[2], lw=2, alpha=0.7)
+            plt.axvline (H0low, color=c[2], lw=2, alpha=0.7)
+            plt.axvline (H0high, color=c[2], lw=2, alpha=0.7)
             
 			# Planck
             if planck is True :
