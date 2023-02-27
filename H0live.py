@@ -12,13 +12,13 @@ from scipy.optimize import fmin
 from scipy.interpolate import interp1d, UnivariateSpline
 import streamlit as st
 from matplotlib.backends.backend_agg import RendererAgg
-
+from seaborn import color_palette
 
 _lock = RendererAgg.lock
 
 
 class H0live :
-    def __init__ (self, events, H0prior="uniform", level=0.9, likelihood_fname="test.csv") :
+    def __init__ (self, events, H0prior="uniform", level=0.9, likelihood_fname="test.csv", planck=True) :
 
 
         likelihood_allevents = pd.read_csv (likelihood_fname)
@@ -42,6 +42,10 @@ class H0live :
 
 
         # plot
+		ymin = 0
+        ymax = 1.1*max(pH0_normalized)
+        c = color_palette('colorblind')
+	
         with _lock :
             fig = plt.figure()
             plt.plot (self.H0_array, pH0_normalized, lw=2.5, color="darkred", label="Combined Posterior")
@@ -49,8 +53,15 @@ class H0live :
             plt.axvline (H0map, color='k', lw=2, alpha=0.7)
             plt.axvline (H0low, color='k', lw=2, alpha=0.7)
             plt.axvline (H0high, color='k', lw=2, alpha=0.7)
+            
+			# Planck
+            if planck is True :
+				planck_H0_value = 67.74
+				planck_H0_sigma = 0.62
+				plt.fill_betweenx([ymin,ymax], planck_H0_value-planck_H0_sigma, planck_H0_value+planck_H0_sigma, color=c[3], alpha=0.3, label="Placnk")
         
             plt.xlim (self.H0_array[0],self.H0_array[-1])
+			plt.ylim (ymin, ymax)
             plt.xlabel (r"$H_{0}$", size=15)
             plt.ylabel (r"$p(H_{0})$", size=15)
             plt.title (r"$H_{0}=%.2f^{+%.2f}_{+%.2f}\ {\rm km\ s^{-1}\ Mpc^{-1}} (%d %s {\rm CI})$"
@@ -58,8 +69,6 @@ class H0live :
             plt.tick_params(labelsize=12, direction='in')
             plt.legend (fontsize=11)
             plt.tight_layout ()
-   
-
 
             st.pyplot(fig, clear_figure=True)
 
