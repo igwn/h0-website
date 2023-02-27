@@ -42,7 +42,7 @@ class H0live :
 
 
         # plot
-		ymin = 0
+        ymin = 0
         ymax = 1.1*max(pH0_normalized)
         c = color_palette('colorblind')
 	
@@ -56,9 +56,9 @@ class H0live :
             
 			# Planck
             if planck is True :
-				planck_H0_value = 67.74
-				planck_H0_sigma = 0.62
-				plt.fill_betweenx([ymin,ymax], planck_H0_value-planck_H0_sigma, planck_H0_value+planck_H0_sigma, color=c[3], alpha=0.3, label="Placnk")
+                planck_H0_value = 67.74
+                planck_H0_sigma = 0.62
+                plt.fill_betweenx([ymin,ymax], planck_H0_value-planck_H0_sigma, planck_H0_value+planck_H0_sigma, color=c[3], alpha=0.3, label="Placnk")
         
             plt.xlim (self.H0_array[0],self.H0_array[-1])
 			plt.ylim (ymin, ymax)
