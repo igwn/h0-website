@@ -60,7 +60,7 @@ class H0live :
                 plt.fill_betweenx([ymin,ymax], planck_H0_value-planck_H0_sigma, planck_H0_value+planck_H0_sigma, color=c[3], alpha=0.3, label="Placnk")
         
             plt.xlim (self.H0_array[0],self.H0_array[-1])
-			plt.ylim (ymin, ymax)
+            plt.ylim (ymin, ymax)
             plt.xlabel (r"$H_{0}$", size=15)
             plt.ylabel (r"$p(H_{0})$", size=15)
             plt.title (r"$H_{0}=%.2f^{+%.2f}_{+%.2f}\ {\rm km\ s^{-1}\ Mpc^{-1}} (%d %s {\rm CI})$"
