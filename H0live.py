@@ -18,7 +18,7 @@ _lock = RendererAgg.lock
 
 
 class H0live :
-    def __init__ (self, events, H0prior="uniform", level=0.9, likelihood_fname="test.csv", planck=True) :
+    def __init__ (self, events, H0prior="uniform", level=0.9, likelihood_fname="test.csv", planck=True, riess=True) :
 
 
         likelihood_allevents = pd.read_csv (likelihood_fname)
@@ -53,12 +53,18 @@ class H0live :
             plt.axvline (H0low, color=c[2], lw=2, alpha=0.7)
             plt.axvline (H0high, color=c[2], lw=2, alpha=0.7)
             
-			# Planck
+            # Planck
             if planck is True :
                 planck_H0_value = 67.74
                 planck_H0_sigma = 0.62
-                plt.fill_betweenx([ymin,ymax], planck_H0_value-planck_H0_sigma, planck_H0_value+planck_H0_sigma, color=c[3], alpha=0.3, label="Placnk")
-        
+                plt.fill_betweenx([ymin,ymax], planck_H0_value-planck_H0_sigma, planck_H0_value+planck_H0_sigma, color=c[3], alpha=0.3, label="Placnk") 
+                
+            #SH0ES
+            if riess is True :
+                riess_H0_value = 73.24
+                riess_H0_sigma = 1.74
+                plt.fill_betweenx([ymin,ymax], riess_H0_value-riess_H0_sigma, riess_H0_value+riess_H0_sigma, color=c[4], alpha=0.3, label="SH0ES")     
+    
             plt.xlim (self.H0_array[0],self.H0_array[-1])
             plt.ylim (ymin, ymax)
             plt.xlabel (r"$H_{0}$", size=15)
