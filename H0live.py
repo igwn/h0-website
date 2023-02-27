@@ -40,7 +40,6 @@ class H0live :
         H0high = CI.upper_level
         H0map = CI.map
 
-
         # plot
         ymin = 0
         ymax = 1.1*max(pH0_normalized)
