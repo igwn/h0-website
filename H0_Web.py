@@ -1,7 +1,7 @@
 """
 Script for website 
 
-Luis Miguel Galvis
+Luis Miguel Galvis E
 """
 
 #Libraries
