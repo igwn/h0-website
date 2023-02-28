@@ -61,7 +61,7 @@ c_levels=['planck', 'riess']
 c_levels_choice=[]
 for i in range(len(c_levels)):
     c_levels_choice.append(st.sidebar.checkbox(c_levels[i])) 
-c_levels_choice
+
 
 #H0live action
 choice_list1=[]
