@@ -55,6 +55,14 @@ for key in dictionary:
 prior_list=['uniform', 'log']
 choice = st.sidebar.selectbox("Priors",prior_list) 
 
+#To select confidence levels
+sb.subheader("Confidence levels")
+c_levels=['planck', 'riess']
+c_levels_choice=[]
+for i in range(len(c_levels)):
+    c_levels_choice.append(st.sidebar.checkbox(c_levels[i])) 
+c_levels_choice
+
 #H0live action
 choice_list1=[]
 for i in range(len(LLok)):
@@ -65,16 +73,15 @@ for i in range(len(LLok)):
 #Plot
 def plotLL(choice_list1):
     if choice== 'uniform' or 'log':
-        h0c= H0live(choice_list1, choice)
+        h0c= H0live(choice_list1, choice,planck=c_levels_choice[0],riess=c_levels_choice[1])
 
 #Default if no event is selected
 if choice_list1==[]:
-   
     choice_list1.append(str(LLo[0])+"_"+str(stb_list[0]))
     plotLL(choice_list1)
 
 #plotLL(choice_list1)
-if sb.button('Calculate'):
+if sb.button('Calculate')==True:
     plotLL(choice_list1)
     
 
