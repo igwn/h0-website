@@ -62,21 +62,27 @@ for i in range(len(LLok)):
         choice_list1.append(str(LLo[i])+"_"+str(stb_list[i]))
 
 
-
 #Plot
 def plotLL(choice_list1):
     if choice== 'uniform' or 'log':
         h0c= H0live(choice_list1, choice)
 
-
-#plotLL(choice_list1)
-if st.button('Calculate'):
-    plotLL(choice_list1)
-    
 #Default if no event is selected
 if choice_list1==[]:
+   
     choice_list1.append(str(LLo[0])+"_"+str(stb_list[0]))
     plotLL(choice_list1)
+
+#plotLL(choice_list1)
+if sb.button('Calculate'):
+    plotLL(choice_list1)
+    
+
+
+
+
+
+
 
 # Sidebar
 sb.header("Related information")
