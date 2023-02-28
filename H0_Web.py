@@ -70,8 +70,11 @@ def plotLL(choice_list1):
     if choice== 'uniform' or 'log':
         h0c= H0live(choice_list1, choice)
            
-plotLL(choice_list1)
-
+#plotLL(choice_list1)
+if st.button('Calculate'):
+    plotLL(choice_list1)
+else:
+    None
 # Sidebar
 sb.header("Related information")
 sb.subheader("What is $H_0$?")
