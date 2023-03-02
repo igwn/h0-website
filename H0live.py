@@ -25,13 +25,11 @@ class H0live :
 
         self.H0_array = likelihood_allevents.H0.values
 
-        #log_likelihood_combined = 0
         likelihood_events_sel = np.zeros ([len(events), likelihood_allevents.shape[0]])
+        
         for ee, event in enumerate(events) :
             likelihood_events_sel [ee] = likelihood_allevents[event].values
 
-        #for event in events :
-        #    log_likelihood_combined += np.log (likelihood_allevents[event].values)
         log_likelihood_combined = np.sum(np.log(likelihood_events_sel), axis=0)
     
         self.likelihood_combined = np.exp(log_likelihood_combined)
@@ -93,11 +91,9 @@ class H0live :
     def probability (self) :
 
         if self.H0prior=="uniform" :
-            #pH0_normalized = self.likelihood_combined/simpson (self.likelihood_combined,self.H0_array)
             pH0_normalized = self.normalize(self.likelihood_combined, self.H0_array)
         elif self.H0prior=="log" : 
             pH0 = self.likelihood_combined/self.H0_array
-            #pH0_normalized =  pH0/simpson (pH0,self.H0_array)
             pH0_normalized = self.normalize(pH0, self.H0_array)
 
         return pH0_normalized
