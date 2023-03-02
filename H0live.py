@@ -26,8 +26,8 @@ class H0live :
         self.H0_array = likelihood_allevents.H0.values
 
         #log_likelihood_combined = 0
-	    likelihood_events_sel = np.zeros ([len(events), likelihood_allevents.shape[0]])
-	    for ee, event in enumerate(events) :
+        likelihood_events_sel = np.zeros ([len(events), likelihood_allevents.shape[0]])
+        for ee, event in enumerate(events) :
             likelihood_events_sel [ee] = likelihood_allevents[event].values
 
         #for event in events :
