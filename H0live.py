@@ -18,17 +18,21 @@ _lock = RendererAgg.lock
 
 
 class H0live :
-    def __init__ (self, events, H0prior="uniform", level=0.9, likelihood_fname="test.csv", planck=True, riess=True) :
+    def __init__ (self, events, H0prior="uniform", level=0.9, likelihood_fname="test.csv", planck=True, riess=True, likelihood_plot=True) :
 
 
         likelihood_allevents = pd.read_csv (likelihood_fname)
 
         self.H0_array = likelihood_allevents.H0.values
 
-        log_likelihood_combined = 0
+        #log_likelihood_combined = 0
+	    likelihood_events_sel = np.zeros ([len(events), likelihood_allevents.shape[0]])
+	    for ee, event in enumerate(events) :
+            likelihood_events_sel [ee] = likelihood_allevents[event].values
 
-        for event in events :
-            log_likelihood_combined += np.log (likelihood_allevents[event].values)
+        #for event in events :
+        #    log_likelihood_combined += np.log (likelihood_allevents[event].values)
+        log_likelihood_combined = np.sum(np.log(likelihood_events_sel), axis=0)
     
         self.likelihood_combined = np.exp(log_likelihood_combined)
         self.H0prior = H0prior
@@ -47,23 +51,32 @@ class H0live :
 	
         with _lock :
             fig = plt.figure()
-            plt.plot (self.H0_array, pH0_normalized, lw=2.5, color=c[0], label="Combined Posterior")
-            plt.plot (self.H0_array, self.prior(), ls="--", color=c[1], lw=2, alpha=0.8, label="Prior")
-            plt.axvline (H0map, color=c[2], lw=2, alpha=0.7)
-            plt.axvline (H0low, color=c[2], lw=2, alpha=0.7)
-            plt.axvline (H0high, color=c[2], lw=2, alpha=0.7)
+            
+            # individual likelihood plot
+            if likelihood_plot is True :
+                for ee, event in enumerate(events) :
+                    likelihood_event_normalized = self.normalize(likelihood_events_sel [ee], self.H0_array)
+                    plt.plot (self.H0_array, likelihood_event_normalized, lw=2.5, color=c[ee], label=event)
+            else :
+                ee = -1
+            
+            plt.plot (self.H0_array, pH0_normalized, lw=2.5, color=c[ee+1], label="Combined Posterior")
+            plt.plot (self.H0_array, self.prior(), ls="--", color=c[ee+2], lw=2, alpha=0.8, label="Prior")
+            plt.axvline (H0map, color=c[ee+3], lw=2, alpha=0.7)
+            plt.axvline (H0low, color=c[ee+3], lw=2, alpha=0.7)
+            plt.axvline (H0high, color=c[ee+3], lw=2, alpha=0.7)
             
             # Planck
             if planck is True :
                 planck_H0_value = 67.74
                 planck_H0_sigma = 0.62
-                plt.fill_betweenx([ymin,ymax], planck_H0_value-planck_H0_sigma, planck_H0_value+planck_H0_sigma, color=c[3], alpha=0.3, label="Placnk") 
+                plt.fill_betweenx([ymin,ymax], planck_H0_value-planck_H0_sigma, planck_H0_value+planck_H0_sigma, color=c[ee+4], alpha=0.3, label="Placnk") 
                 
             #SH0ES
             if riess is True :
                 riess_H0_value = 73.24
                 riess_H0_sigma = 1.74
-                plt.fill_betweenx([ymin,ymax], riess_H0_value-riess_H0_sigma, riess_H0_value+riess_H0_sigma, color=c[4], alpha=0.3, label="SH0ES")     
+                plt.fill_betweenx([ymin,ymax], riess_H0_value-riess_H0_sigma, riess_H0_value+riess_H0_sigma, color=c[ee+5], alpha=0.3, label="SH0ES")     
     
             plt.xlim (self.H0_array[0],self.H0_array[-1])
             plt.ylim (ymin, ymax)
@@ -80,10 +93,12 @@ class H0live :
     def probability (self) :
 
         if self.H0prior=="uniform" :
-            pH0_normalized = self.likelihood_combined/simpson (self.likelihood_combined,self.H0_array)
+            #pH0_normalized = self.likelihood_combined/simpson (self.likelihood_combined,self.H0_array)
+            pH0_normalized = self.normalize(self.likelihood_combined, self.H0_array)
         elif self.H0prior=="log" : 
             pH0 = self.likelihood_combined/self.H0_array
-            pH0_normalized =  pH0/simpson (pH0,self.H0_array)
+            #pH0_normalized =  pH0/simpson (pH0,self.H0_array)
+            pH0_normalized = self.normalize(pH0, self.H0_array)
 
         return pH0_normalized
 
@@ -95,6 +110,10 @@ class H0live :
             H0prior = 1/invH0prior
         
         return H0prior
+    
+    def normalize (self, y, x) :
+        norm = simpson(y,x) 
+        return y/norm
 
 
 class credible_interval:
