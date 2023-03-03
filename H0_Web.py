@@ -62,6 +62,13 @@ c_levels_choice=[]
 for i in range(len(c_levels)):
     c_levels_choice.append(st.sidebar.checkbox(c_levels[i])) 
 
+#To select individual likelihood
+
+sb.subheader("Individual likelihood")
+individual_L=['plot']
+individual_L_choice=[]
+for i in range(len(individual_L)):
+    individual_L_choice.append(st.sidebar.checkbox(individual_L[i])) 
 
 #H0live action
 choice_list1=[]
@@ -73,7 +80,7 @@ for i in range(len(LLok)):
 #Plot
 def plotLL(choice_list1):
     if choice== 'uniform' or 'log':
-        h0c= H0live(choice_list1, choice,planck=c_levels_choice[0],riess=c_levels_choice[1])
+        h0c= H0live(choice_list1, choice,planck=c_levels_choice[0],riess=c_levels_choice[1],likelihood_plot= individual_L_choice[0])
 
 #Default if no event is selected
 if choice_list1==[]:
