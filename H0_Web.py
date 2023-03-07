@@ -34,7 +34,7 @@ def list_events(csv_file):
 
 
 evl_list = list_events('test.csv')
-
+st.cache()
 dictionary={}
 for i in range(len(evl_list)):
     if evl_list[i].split('_')[0] in dictionary:
@@ -57,14 +57,14 @@ choice = st.sidebar.selectbox("Priors",prior_list)
 
 #To select confidence levels
 sb.subheader("Confidence levels")
-c_levels=['planck', 'riess']
+c_levels=['Planck', 'SHOES']
 c_levels_choice=[]
 for i in range(len(c_levels)):
     c_levels_choice.append(st.sidebar.checkbox(c_levels[i])) 
 
 #To select individual likelihood
 
-sb.subheader("Individual likelihood")
+sb.subheader("Individual likelihoods")
 individual_L=['plot']
 individual_L_choice=[]
 for i in range(len(individual_L)):
@@ -77,20 +77,19 @@ for i in range(len(LLok)):
         choice_list1.append(str(LLo[i])+"_"+str(stb_list[i]))
 
 
-#Plot
-def plotLL(choice_list1):
-    if choice== 'uniform' or 'log':
-        h0c= H0live(choice_list1, choice,planck=c_levels_choice[0],riess=c_levels_choice[1],likelihood_plot=individual_L_choice[0])
 
+    
 #Default if no event is selected
+choice_list2=[]
 if choice_list1==[]:
-    choice_list1.append(str(LLo[0])+"_"+str(stb_list[0]))
-    plotLL(choice_list1)
+    choice_list2.append(str(LLo[0])+"_"+str(dictionary[LLo[0]][0]))
+    H0live(choice_list2)
+else:
+     H0live(choice_list1, choice,planck=c_levels_choice[0],riess=c_levels_choice[1],likelihood_plot=individual_L_choice[0])
+
+    
 
 #plotLL(choice_list1)
-if sb.button('Calculate')==True:
-    plotLL(choice_list1)
-    
 
 
 
