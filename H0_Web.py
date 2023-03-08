@@ -76,9 +76,7 @@ for i in range(len(LLok)):
     if LLok[i]==True:
         choice_list1.append(str(LLo[i])+"_"+str(stb_list[i]))
 
-
-
-    
+   
 #Default if no event is selected
 choice_list2=[]
 if choice_list1==[]:
@@ -88,15 +86,6 @@ else:
      H0live(choice_list1, choice,planck=c_levels_choice[0],riess=c_levels_choice[1],likelihood_plot=individual_L_choice[0])
 
     
-
-#plotLL(choice_list1)
-
-
-
-
-
-
-
 # Sidebar
 sb.header("Related information")
 sb.subheader("What is $H_0$?")
