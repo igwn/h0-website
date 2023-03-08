@@ -42,48 +42,55 @@ for i in range(len(evl_list)):
     else:
         dictionary[evl_list[i].split('_')[0]]=[evl_list[i].split('_')[1]]
 
-LLo=[]
-LLok=[]
-stb_list=[]
-sb.header("Events and counterparts")
-for key in dictionary:
-    LLok.append(st.sidebar.checkbox(key))
-    LLo.append(key)
-    stb_list.append(st.sidebar.selectbox("Counterpart ",dictionary[key],key=key,label_visibility="collapsed"))
+with st.form("My form"):
+    LLo=[]
+    LLok=[]
+    stb_list=[]
+    sb.header("Events and counterparts")
+    for key in dictionary:
+        LLok.append(st.sidebar.checkbox(key))
+        LLo.append(key)
+        stb_list.append(st.sidebar.selectbox("Counterpart ",dictionary[key],key=key,label_visibility="collapsed"))
  
 #To select the desired prior
-prior_list=['uniform', 'log']
-choice = st.sidebar.selectbox("Priors",prior_list) 
+    prior_list=['uniform', 'log']
+    choice = st.sidebar.selectbox("Priors",prior_list) 
 
 #To select confidence levels
-sb.subheader("Confidence levels")
-c_levels=['Planck', 'SHOES']
-c_levels_choice=[]
-for i in range(len(c_levels)):
-    c_levels_choice.append(st.sidebar.checkbox(c_levels[i])) 
+    sb.subheader("Confidence levels")
+    c_levels=['Planck', 'SHOES']
+    c_levels_choice=[]
+    for i in range(len(c_levels)):
+        c_levels_choice.append(st.sidebar.checkbox(c_levels[i])) 
 
 #To select individual likelihood
 
-sb.subheader("Individual likelihoods")
-individual_L=['plot']
-individual_L_choice=[]
-for i in range(len(individual_L)):
-    individual_L_choice.append(st.sidebar.checkbox(individual_L[i])) 
+    sb.subheader("Individual likelihoods")
+    individual_L=['plot']
+    individual_L_choice=[]
+    for i in range(len(individual_L)):
+        individual_L_choice.append(st.sidebar.checkbox(individual_L[i])) 
 
 #H0live action
-choice_list1=[]
-for i in range(len(LLok)):
-    if LLok[i]==True:
-        choice_list1.append(str(LLo[i])+"_"+str(stb_list[i]))
+    choice_list1=[]
+    for i in range(len(LLok)):
+        if LLok[i]==True:
+            choice_list1.append(str(LLo[i])+"_"+str(stb_list[i]))
 
    
 #Default if no event is selected
-choice_list2=[]
-if choice_list1==[]:
-    choice_list2.append(str(LLo[0])+"_"+str(dictionary[LLo[0]][0]))
-    H0live(choice_list2)
-else:
-     H0live(choice_list1, choice,planck=c_levels_choice[0],riess=c_levels_choice[1],likelihood_plot=individual_L_choice[0])
+    choice_list2=[]
+    if choice_list1==[]:
+        choice_list2.append(str(LLo[0])+"_"+str(dictionary[LLo[0]][0]))
+        H0live(choice_list2)
+    
+    Calculated = st.form_submit_button("Calculate")
+    if Calculated:
+        H0live(choice_list1, choice,planck=c_levels_choice[0],riess=c_levels_choice[1],likelihood_plot=individual_L_choice[0])
+
+
+#form.form_submit_button("Calculate")
+#H0live(choice_list1, choice,planck=c_levels_choice[0],riess=c_levels_choice[1],likelihood_plot=individual_L_choice[0])
 
     
 # Sidebar
