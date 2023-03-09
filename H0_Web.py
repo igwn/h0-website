@@ -16,9 +16,6 @@ from H0live import *
 
 ###########################################
 
-
-#st.set_page_config(page_title=r"""$H_0$Website""", 
- #                              initial_sidebar_state= 'expanded',layout="centered")
 title= 'Latest Standard Siren Measurement'
 
 sb = st.sidebar
@@ -75,7 +72,7 @@ with sb.form("My form"):
     for i in range(len(individual_L)):
         individual_L_choice.append(st.checkbox(individual_L[i])) 
 
-#H0live action
+
     choice_list1=[]
     for i in range(len(LLok)):
         if LLok[i]==True:
@@ -90,24 +87,9 @@ if choice_list1==[]:
     choice_list2.append(str(LLo[0])+"_"+str(dictionary[LLo[0]][0]))
     H0live(choice_list2)
 
+#H0live action
 if Calculated:
     H0live(choice_list1, choice,planck=c_levels_choice[0],riess=c_levels_choice[1],likelihood_plot=individual_L_choice[0])   
-
-
-
-
-
-#form.form_submit_button("Calculate")
-#H0live(choice_list1, choice,planck=c_levels_choice[0],riess=c_levels_choice[1],likelihood_plot=individual_L_choice[0])
-
-    
-
-#plotLL(choice_list1)
-
-
-
-
-
 
 
 # Sidebar
