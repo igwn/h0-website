@@ -86,10 +86,14 @@ choice_list2=[]
 if choice_list1==[]:
     choice_list2.append(str(LLo[0])+"_"+str(dictionary[LLo[0]][0]))
     H0live(choice_list2)
+else:
+    if Calculated:
+        H0live(choice_list1, choice,planck=c_levels_choice[0],riess=c_levels_choice[1],likelihood_plot=individual_L_choice[0])
+
+
 
 #H0live action
-if Calculated:
-    H0live(choice_list1, choice,planck=c_levels_choice[0],riess=c_levels_choice[1],likelihood_plot=individual_L_choice[0])   
+
 
 
 # Sidebar
