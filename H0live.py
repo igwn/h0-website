@@ -68,7 +68,7 @@ class H0live :
             if planck is True :
                 planck_H0_value = 67.74
                 planck_H0_sigma = 0.62
-                plt.fill_betweenx([ymin,ymax], planck_H0_value-planck_H0_sigma, planck_H0_value+planck_H0_sigma, color=c[ee+4], alpha=0.3, label="Placnk") 
+                plt.fill_betweenx([ymin,ymax], planck_H0_value-planck_H0_sigma, planck_H0_value+planck_H0_sigma, color=c[ee+4], alpha=0.3, label="Planck") 
                 
             #SH0ES
             if riess is True :
