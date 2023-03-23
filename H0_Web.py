@@ -5,13 +5,7 @@ Luis Miguel Galvis E
 """
 
 #Libraries
-
-from time import time
-from PIL import Image
-import matplotlib.pyplot as plt
-import plotly.figure_factory as ff
 import streamlit as st
-from astropy import constants as const
 from H0live import *
 
 ###########################################
@@ -27,13 +21,14 @@ c1.image('https://yt3.ggpht.com/dsz-32urUxdYKd8a6A2cnmOAo7zCXBtKFXGm_eRjRdYFkqc3
 
 st.title(title)
 
+#Function to read the csv file and get the events
 def list_events(csv_file):
     ev1=pd.read_csv(csv_file,sep=",",engine='python')
     return ev1.columns[1:].values.tolist()
 
-
 evl_list = list_events('test.csv')
-#st.cache()
+
+#Function to create the dictionary with the events and their counterparts
 dictionary={}
 
 for i in range(len(evl_list)):
@@ -42,16 +37,19 @@ for i in range(len(evl_list)):
     else:
         dictionary[evl_list[i].split('_')[0]]=[evl_list[i].split('_')[1]]
 
-LLo=[]
-LLok=[]
-stb_list=[]
+#To create the lists to be used
+Events=[]
+Events_in_checbox=[]
+Counterpart_in_selectbox=[]
+
+#To create the sidebar
 with sb.form("My form"):
- 
+#To select the events and their counterparts
     st.header("Events and counterparts")
     for key in dictionary:
-        LLok.append(st.checkbox(key))
-        LLo.append(key)
-        stb_list.append(st.selectbox("Counterpart ",dictionary[key],key=key,label_visibility="collapsed"))
+        Events_in_checbox.append(st.checkbox(key))
+        Events.append(key)
+        Counterpart_in_selectbox.append(st.selectbox("Counterpart ",dictionary[key],key=key,label_visibility="collapsed"))
  
 #To select the desired priors
     prior_list=['uniform', 'log']
@@ -72,31 +70,29 @@ with sb.form("My form"):
     for i in range(len(individual_L)):
         individual_L_choice.append(st.checkbox(individual_L[i])) 
 
-
+#To create the list of events and their counterparts chosen
     choice_list1=[]
-    for i in range(len(LLok)):
-        if LLok[i]==True:
-            choice_list1.append(str(LLo[i])+"_"+str(stb_list[i]))
+    for i in range(len(Events_in_checbox)):
+        if Events_in_checbox[i]==True:
+            choice_list1.append(str(Events[i])+"_"+str(Counterpart_in_selectbox[i]))
 
 
-
+    #To calculate the H0
     Calculated = st.form_submit_button("Calculate")   
+
 #Default if no event is selected
 choice_list2=[]
 if choice_list1==[]:
-    choice_list2.append(str(LLo[0])+"_"+str(dictionary[LLo[0]][0]))
+    choice_list2.append(str(Events[0])+"_"+str(dictionary[Events[0]][0]))
     H0live(choice_list2)
+#If events are selected
 else:
     if Calculated:
         H0live(choice_list1, choice,planck=c_levels_choice[0],riess=c_levels_choice[1],likelihood_plot=individual_L_choice[0])
 
 
 
-#H0live action
-
-
-
-# Sidebar
+# To add the information about the website
 sb.header("Related information")
 sb.subheader("What is $H_0$?")
 sb.markdown(r"""$H_0$ is a cosmological parameter which measure 
@@ -108,14 +104,12 @@ Bright sirens are astrophysical systems producing detectable electromagnetic (EM
 At low redshift H_0 is approximately the inverse of slope of the distance-redshift relation, also known as the Hubble diagram.
 
                 """)
-#sb.markdown("About gravitational wave events: [GraceDB](https://gracedb.ligo.org/api/events/)")
+
 sb.markdown(
     "What is LIGO?: [LIGO](https://www.ligo.org/about.php)")
 
 sb.markdown(
     "How can GW be used to estimate H0? : [Measuring the Expansion of the Universe with Gravitational Waves](https://www.ligo.org/science/Publication-GW170817Hubble/)")
-
-
 
 
 st.subheader("How to use the H0 calculator?")
