@@ -18,7 +18,7 @@ _lock = RendererAgg.lock
 
 
 class H0live :
-    def __init__ (self, events, H0prior="uniform", level=0.9, likelihood_fname="test.csv", planck=True, riess=True, likelihood_plot=True, , data_download=True) :
+    def __init__ (self, events, H0prior="uniform", level=0.9, likelihood_fname="test.csv", planck=True, riess=True, likelihood_plot=True, data_download=True) :
 
 
         likelihood_allevents = pd.read_csv (likelihood_fname)
