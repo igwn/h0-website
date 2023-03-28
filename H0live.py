@@ -18,7 +18,7 @@ _lock = RendererAgg.lock
 
 
 class H0live :
-    def __init__ (self, events, H0prior="uniform", level=0.9, likelihood_fname="test.csv", planck=True, riess=True, likelihood_plot=True) :
+    def __init__ (self, events, H0prior="uniform", level=0.9, likelihood_fname="test.csv", planck=True, riess=True, likelihood_plot=True, , data_download=True) :
 
 
         likelihood_allevents = pd.read_csv (likelihood_fname)
@@ -87,6 +87,12 @@ class H0live :
             plt.tight_layout ()
 
             st.pyplot(fig, clear_figure=True)
+
+        if data_download :
+            self.H0data_download = pd.DataFrame( likelihood_events_sel.T, columns = events)
+            self.H0data_download.insert (0, "H0", self.H0_array)
+            self.H0data_download.insert (self.H0data_download.shape [-1], "combined_posterior", pH0_normalized)    
+            
 
     def probability (self) :
 
