@@ -9,6 +9,9 @@ import streamlit as st
 from H0live import *
 
 ###########################################
+#Session status
+if 'object' not in st.session_state:
+    st.session_state.object = None
 
 title= 'Latest Standard Siren Measurement'
 
@@ -65,10 +68,8 @@ with sb.form("My form"):
 #To select individual likelihood
 
     st.subheader("Individual likelihoods")
-    individual_L=['plot']
-    individual_L_choice=[]
-    for i in range(len(individual_L)):
-        individual_L_choice.append(st.checkbox(individual_L[i])) 
+    individual_L_choice=st.checkbox('plot')
+    
 
 #To create the list of events and their counterparts chosen
     choice_list1=[]
@@ -77,18 +78,43 @@ with sb.form("My form"):
             choice_list1.append(str(Events[i])+"_"+str(Counterpart_in_selectbox[i]))
 
 
-    #To calculate the H0
+     
+    #To calculate the H0    
     Calculated = st.form_submit_button("Calculate")   
+    
 
 #Default if no event is selected
 choice_list2=[]
 if choice_list1==[]:
     choice_list2.append(str(Events[0])+"_"+str(dictionary[Events[0]][0]))
-    H0live(choice_list2)
+    h0live_output=H0live(choice_list2)
+    csv = h0live_output.H0data_download.to_csv(index=False)
+            
+    sb.download_button(
+    "Press to Download",
+    csv,
+    "file.csv",
+    "text/csv",
+    key='download-csv')  
 #If events are selected
 else:
     if Calculated:
-        H0live(choice_list1, choice,planck=c_levels_choice[0],riess=c_levels_choice[1],likelihood_plot=individual_L_choice[0])
+        st.session_state.object=H0live(choice_list1, choice,planck=c_levels_choice[0],riess=c_levels_choice[1],likelihood_plot=individual_L_choice,data_download=True)
+        csv = st.session_state.object.H0data_download.to_csv(index=False)
+        a=sb.download_button(
+        "Press to Download",
+        csv,
+        "file.csv",
+        "text/csv",
+        key='download-csv')     
+        
+#To work outside of form without disappearing the image
+    if not Calculated:
+        if st.session_state.object is not None:
+            H0live(choice_list1, choice,planck=c_levels_choice[0],riess=c_levels_choice[1],likelihood_plot=individual_L_choice,data_download=True)
+            
+
+
 
 
 
