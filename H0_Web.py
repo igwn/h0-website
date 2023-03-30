@@ -111,8 +111,14 @@ else:
 #To work outside of form without disappearing the image
     if not Calculated:
         if st.session_state.object is not None:
-            H0live(choice_list1, choice,planck=c_levels_choice[0],riess=c_levels_choice[1],likelihood_plot=individual_L_choice,data_download=True)
-            
+            h0live_output=H0live(choice_list1, choice,planck=c_levels_choice[0],riess=c_levels_choice[1],likelihood_plot=individual_L_choice,data_download=True)
+            csv = h0live_output.H0data_download.to_csv(index=False)
+            b=sb.download_button(
+            "Download csv file",
+            csv,
+            "file.csv",
+            "text/csv",
+            key='download-csv')  
 
 
 
