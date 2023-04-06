@@ -50,9 +50,15 @@ with sb.form("My form"):
 #To select the events and their counterparts
     st.header("Events and counterparts")
     for key in dictionary:
-        Events_in_checbox.append(st.checkbox(key))
-        Events.append(key)
-        Counterpart_in_selectbox.append(st.selectbox("Counterpart ",dictionary[key],key=key,label_visibility="collapsed"))
+        if Events_in_checbox==[] and Counterpart_in_selectbox==[]:
+            Events_in_checbox.append(st.checkbox(key,True))
+            Events.append(key)
+            Counterpart_in_selectbox.append(st.selectbox("Counterpart ",dictionary[key],key=key,label_visibility="collapsed"))
+        else:
+            Events_in_checbox.append(st.checkbox(key))
+            Events.append(key)
+            Counterpart_in_selectbox.append(st.selectbox("Counterpart ",dictionary[key],key=key,label_visibility="collapsed"))
+    
  
 #To select the desired priors
     prior_list=['uniform', 'log']
@@ -83,11 +89,12 @@ with sb.form("My form"):
     Calculated = st.form_submit_button("Calculate")   
     
 
-#Default if no event is selected
+#Default values starting the program
 choice_list2=[]
-if choice_list1==[]:
+
+if not Calculated:
     choice_list2.append(str(Events[0])+"_"+str(dictionary[Events[0]][0]))
-    h0live_output=H0live(choice_list2)
+    h0live_output=H0live(choice_list2, choice,planck=c_levels_choice[0],riess=c_levels_choice[1],likelihood_plot=individual_L_choice,data_download=True)
     csv = h0live_output.H0data_download.to_csv(index=False)
             
     sb.download_button(
@@ -97,6 +104,8 @@ if choice_list1==[]:
     "text/csv",
     key='download-csv')  
 #If events are selected
+
+
 else:
     if Calculated:
         st.session_state.object=H0live(choice_list1, choice,planck=c_levels_choice[0],riess=c_levels_choice[1],likelihood_plot=individual_L_choice,data_download=True)
