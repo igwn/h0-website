@@ -87,26 +87,33 @@ with sb.form("My form"):
      
     #To calculate the H0    
     Calculated = st.form_submit_button("Calculate")   
+
+#When no event is selected
+if choice_list1==[]:
+    if  Calculated or not Calculated:
+        st.write(r"Please select an event and its counterpart.")
+
     
 
 #Default values starting the program
-choice_list2=[]
+else:
+    choice_list2=[]
 
-if not Calculated:
-    choice_list2.append(str(Events[0])+"_"+str(dictionary[Events[0]][0]))
-    h0live_output=H0live(choice_list2, choice,planck=c_levels_choice[0],riess=c_levels_choice[1],likelihood_plot=individual_L_choice,data_download=True)
-    csv = h0live_output.H0data_download.to_csv(index=False)
-            
-    sb.download_button(
-    "Press to Download",
-    csv,
-    "file.csv",
-    "text/csv",
-    key='download-csv')  
+    if not Calculated:
+        choice_list2.append(str(Events[0])+"_"+str(dictionary[Events[0]][0]))
+        h0live_output=H0live(choice_list2, choice,planck=c_levels_choice[0],riess=c_levels_choice[1],likelihood_plot=individual_L_choice,data_download=True)
+        csv = h0live_output.H0data_download.to_csv(index=False)
+                
+        sb.download_button(
+        "Press to Download",
+        csv,
+        "file.csv",
+        "text/csv",
+        key='download-csv')  
 #If events are selected
 
 
-else:
+
     if Calculated:
         st.session_state.object=H0live(choice_list1, choice,planck=c_levels_choice[0],riess=c_levels_choice[1],likelihood_plot=individual_L_choice,data_download=True)
         csv = st.session_state.object.H0data_download.to_csv(index=False)
