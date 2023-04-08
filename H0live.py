@@ -80,7 +80,7 @@ class H0live :
             plt.ylim (ymin, ymax)
             plt.xlabel (r"$H_{0}$", size=15)
             plt.ylabel (r"$p(H_{0})$", size=15)
-            plt.title (r"$H_{0}=%.2f^{+%.2f}_{+%.2f}\ {\rm km\ s^{-1}\ Mpc^{-1}} (%d %s {\rm CI})$"
+            plt.title (r"$H_{0}=%.2f^{+%.2f}_{-%.2f}\ {\rm km\ s^{-1}\ Mpc^{-1}} (%d %s {\rm CI})$"
         %(H0map, H0high-H0map, H0map-H0low, level*100, r"$%$"))
             plt.tick_params(labelsize=12, direction='in')
             plt.legend (fontsize=11)
