@@ -111,9 +111,6 @@ else:
         "text/csv",
         key='download-csv')  
 #If events are selected
-
-
-
     if Calculated:
         st.session_state.object=H0live(choice_list1, choice,planck=c_levels_choice[0],riess=c_levels_choice[1],likelihood_plot=individual_L_choice,data_download=True)
         csv = st.session_state.object.H0data_download.to_csv(index=False)
@@ -135,10 +132,6 @@ else:
             "file.csv",
             "text/csv",
             key='download-csv')  
-
-
-
-
 
 # To add the information about the website
 sb.header("Related information")
