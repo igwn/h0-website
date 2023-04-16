@@ -1,45 +1,57 @@
 {
   "GW170817": {
     "src": "local",
-    "Name": "GW170817",
+    "id": "GW170817",
     "display_name": "GW170917",
     "Skymap": "GW170817_skymap.fits.gz",
     "reference": "https://doi.org/10.1103%2FPhysRevLett.119.161101",
     "Counterparts": {
       "NGC4993": {
         "src": "local",
-        "Name": "NGC4993",
+        "id": "NGC4993",
+        "cz_mean": 2993,
+        "cz_sigma": 7,
+        "ra_deg": 197.44746,
+        "dec_deg": -23.11786,
+        "reference": "https://doi.org/10.3847%2F2041-8213%2Faa91c9",
         "Parameters": {
           "counterpart_cz": 2993,
           "counterpart_sigma_cz": 7,
           "counterpart_ra": 3.446108276699803,
           "counterpart_dec": -0.40348277301509633
         },
-        "reference": "https://doi.org/10.3847%2F2041-8213%2Faa91c9",
-        "column_name": "GW170817_NGC4993"
+        "column_name": "GW170817_NGC4993",
+        "gw_distance_mean": 36.895308398243614,
+        "gw_distance_sigma": 7.279784232801306
       },
       "ESO508-24": {
         "src": "local",
-        "Name": "ESO508-24",
+        "id": "ESO508-24",
         "display_name": "ESO 508-24",
+        "cz_mean": 2851,
+        "cz_sigma": 0.1,
+        "ra_deg": 201.68375,
+        "dec_deg": -23.6,
+        "reference": "https://vizier.cds.unistra.fr/viz-bin/VizieR-S?ESO-LV%20508-0240",
         "Parameters": {
           "counterpart_cz": 2851,
           "counterpart_sigma_cz": 0.1,
           "counterpart_ra": 3.5200454852691134,
           "counterpart_dec": -0.4118977034706618
         },
-        "reference": "https://vizier.cds.unistra.fr/viz-bin/VizieR-S?ESO-LV%20508-0240",
-        "column_name": "GW170817_ESO508-24"
+        "column_name": "GW170817_ESO508-24",
+        "gw_distance_mean": 16.568561382164706,
+        "gw_distance_sigma": 2.8145429832613713
       }
     }
   },
   "GW190425": {
     "src": "gracedb",
-    "Name": "S190425z",
+    "id": "S190425z",
     "display_name": "GW190425",
     "reference": "https://doi.org/10.7935/qf3a-3z67",
-    "meta": {
-      "retrieved": "2023-04-16T22:10:37.846",
+    "gracedb_meta": {
+      "retrieved": "2023-04-16T23:00:38.803",
       "src": "https://gracedb.ligo.org/api/",
       "vonum": 2
     },
@@ -47,16 +59,22 @@
     "Counterparts": {
       "FRB20190425A": {
         "src": "local",
-        "Name": "FRB20190425A",
+        "id": "FRB20190425A",
         "display_name": "FRB 20190425A",
+        "cz_mean": 0.03136,
+        "cz_sigma": 9e-05,
+        "ra_deg": 255.72,
+        "dec_deg": 21.52,
+        "reference": "https://doi.org/10.1038/s41550-023-01917-x",
         "Parameters": {
           "counterpart_cz": 0.03136,
           "counterpart_sigma_cz": 9e-05,
           "counterpart_ra": 4.4631559631999,
           "counterpart_dec": 0.3755948550291797
         },
-        "reference": "https://doi.org/10.1038/s41550-023-01917-x",
-        "column_name": "GW190425_FRB20190425A"
+        "column_name": "GW190425_FRB20190425A",
+        "gw_distance_mean": 139.66824778164863,
+        "gw_distance_sigma": 44.33695762816573
       }
     }
   }

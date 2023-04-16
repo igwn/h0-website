@@ -12,14 +12,14 @@
     "GW_data":{
         "GW170817":{
             "src":"local",
-            "Name":"GW170817",
+            "id":"GW170817",
             "display_name":"GW170917",
             "Skymap":"GW170817_skymap.fits.gz",
             "reference":"https://doi.org/10.1103%2FPhysRevLett.119.161101"
         },
         "GW190425":{
             "src":"gracedb",
-            "Name":"S190425z",
+            "id":"S190425z",
             "display_name":"GW190425",
             "reference":"https://doi.org/10.7935/qf3a-3z67"
         }
@@ -27,37 +27,31 @@
     "EM_data":{
         "NGC4993":{
             "src":"local",
-            "Name":"NGC4993",
-            "Parameters":{
-                "cz_mean":2993,
-                "cz_sigma":7,
-                "ra_deg":197.44746,
-                "dec_deg": -23.11786
-            },
+            "id":"NGC4993",
+            "cz_mean":2993,
+            "cz_sigma":7,
+            "ra_deg":197.44746,
+            "dec_deg": -23.11786,
             "reference":"https://doi.org/10.3847%2F2041-8213%2Faa91c9"
         },
         "ESO508-24":{
             "src":"local",
-            "Name":"ESO508-24",
+            "id":"ESO508-24",
             "display_name":"ESO 508-24",
-            "Parameters":{
-                "cz_mean":2851,
-                "cz_sigma":0.1,
-                "ra_deg":201.68375,
-                "dec_deg":-23.6
-            },
+            "cz_mean":2851,
+            "cz_sigma":0.1,
+            "ra_deg":201.68375,
+            "dec_deg":-23.6,
             "reference":"https://vizier.cds.unistra.fr/viz-bin/VizieR-S?ESO-LV%20508-0240"
         },
         "FRB20190425A":{
             "src":"local",
-            "Name":"FRB20190425A",
+            "id":"FRB20190425A",
             "display_name":"FRB 20190425A",
-            "Parameters":{
-                "cz_mean":0.03136,
-                "cz_sigma":0.00009,
-                "ra_deg":255.72,
-                "dec_deg":21.52
-            },
+            "cz_mean":0.03136,
+            "cz_sigma":0.00009,
+            "ra_deg":255.72,
+            "dec_deg":21.52,
             "reference":"https://doi.org/10.1038/s41550-023-01917-x"
         }
     }

@@ -19,7 +19,7 @@ def readGraceDB(sid,full=False,verbose=True):
     voevents=json.loads(voreq.content)
     
     evOut={}
-    evOut['meta']={'retrieved':Time.now().isot,'src':service_url}
+    evOut['gracedb_meta']={'retrieved':Time.now().isot,'src':service_url}
     # evOut['voevents']=voevents
     #filter event list
     volist=voevents['voevents']
@@ -31,7 +31,7 @@ def readGraceDB(sid,full=False,verbose=True):
     cdate=Time(' '.join(thisvo['created'].split(' ')[0:2]))
     thisvoe_url = thisvo['links']['file']
     vonum=thisvo['N']
-    evOut["meta"]['vonum']=vonum
+    evOut["gracedb_meta"]['vonum']=vonum
     
     xml={}
     xmlurl=thisvoe_url
@@ -89,8 +89,9 @@ class EventsList:
             self.make_colnames(colfile)
         
         json.dump(self.bright_sirens,open(fileout,'w'),indent=2)
-        bsl.H0likelihood(fileout,filename="bright_sirens.csv")
-
+        bslH0=bsl.H0likelihood(fileout,filename="bright_sirens.csv")
+        self.import_distance(bslH0.get_distance())
+        json.dump(self.bright_sirens,open(fileout,'w'),indent=2)
     
     def process_events(self):
         self.bright_sirens={}
@@ -106,7 +107,7 @@ class EventsList:
             event=gwdata[gwid]
             if gwdata[gwid]["src"].lower()=="gracedb":
                 # retrieve data from GraceDB
-                gracedb_data=readGraceDB(gwdata[gwid]["Name"])
+                gracedb_data=readGraceDB(gwdata[gwid]["id"])
                 for x in gracedb_data:
                     print(x,gracedb_data[x])
                     event[x]=gracedb_data[x]
@@ -121,16 +122,15 @@ class EventsList:
                     event["Counterparts"][emid]=emdata[emid]
                     # convert parameters
                     try:
-                        paramsIn=emdata[emid]["Parameters"]
                         paramsOut={}
-                        paramsOut["counterpart_cz"]=paramsIn["cz_mean"]
-                        paramsOut["counterpart_sigma_cz"]=paramsIn["cz_sigma"]
-                        paramsOut["counterpart_ra"]=paramsIn["ra_deg"]*np.pi/180
-                        paramsOut["counterpart_dec"]=paramsIn["dec_deg"]*np.pi/180
+                        paramsOut["counterpart_cz"]=emdata[emid]["cz_mean"]
+                        paramsOut["counterpart_sigma_cz"]=emdata[emid]["cz_sigma"]
+                        paramsOut["counterpart_ra"]=emdata[emid]["ra_deg"]*np.pi/180
+                        paramsOut["counterpart_dec"]=emdata[emid]["dec_deg"]*np.pi/180
                         event["Counterparts"][emid]["Parameters"]=paramsOut
                     except:
                         print(f'Error converting parameters for {emid}')
-                    event["Counterparts"][emid]["column_name"]=colname(gwid,emdata[emid]["Name"])
+                    event["Counterparts"][emid]["column_name"]=colname(gwid,emid)
                     N_em=N_em+1
             
             self.bright_sirens[ev]=event
@@ -142,4 +142,11 @@ class EventsList:
             for emev in self.bright_sirens[gwev]["Counterparts"]:
                 colnames[gwev][emev]=self.bright_sirens[gwev]["Counterparts"][emev]["column_name"]
         json.dump(colnames,open(filename,'w'),indent=2)
+        return
+    
+    def import_distance(self,dist):
+        for gwev in dist:
+            for emev in dist[gwev]:
+                self.bright_sirens[gwev]["Counterparts"][emev]["gw_distance_mean"]=dist[gwev][emev]["dist_mean"]
+                self.bright_sirens[gwev]["Counterparts"][emev]["gw_distance_sigma"]=dist[gwev][emev]["dist_sigma"]
         return
