@@ -147,7 +147,7 @@ At low redshift H_0 is approximately the inverse of slope of the distance-redshi
                 """)
 
 sb.markdown(
-    "What is LIGO?: [LIGO](https://www.ligo.org/about.php)")
+    "What are [LIGO](https://www.ligo.org/about.php), [Virgo](https://www.virgo-gw.eu/) and [KAGRA](https://gwcenter.icrr.u-tokyo.ac.jp/en/)?")
 
 sb.markdown(
     "How can GW be used to estimate H0? : [Measuring the Expansion of the Universe with Gravitational Waves](https://www.ligo.org/science/Publication-GW170817Hubble/)")
