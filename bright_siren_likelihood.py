@@ -73,14 +73,17 @@ class H0likelihood :
             bright_siren_information_dictionary = json.load(bright_siren_info)
         
         self.bright_siren_dictionary = {}
+        self.dl_out={}
         
         for event in bright_siren_information_dictionary.keys () :
 
             self.bright_siren_dictionary [event] = {}
+            self.dl_out[event]={}
 
             for em_info in bright_siren_information_dictionary [event]['Counterparts'].keys() :
 
-                em_name = bright_siren_information_dictionary[event]["Counterparts"][em_info]["Name"]
+                # em_name = bright_siren_information_dictionary[event]["Counterparts"][em_info]["Name"]
+                em_name = em_info
             
                 skymap = bright_siren_information_dictionary [event] ["Skymap"]
                 counterpart_ra = bright_siren_information_dictionary [event] ['Counterparts'] [em_info] ["Parameters"] ["counterpart_ra"]
@@ -123,10 +126,17 @@ class H0likelihood :
                 self.bright_siren_dictionary [event] [em_name] ["likelihood"] = likelihood_x_dl_skymap
                 self.bright_siren_dictionary [event] [em_name] ["z_prior"] = pz
 
+                self.dl_out[event][em_name]={'dist_mean':distmu_los,'dist_sigma':distsigma_los}
+
         # save likelihood information
         likelihood_df = self.H0likelihood_events ()
         likelihood_df.insert (0, "H0", self.H0_array) 
         likelihood_df.to_csv (filename, index=False)
+    
+        return
+    
+    def get_distance(self):
+        return self.dl_out
     
     def likelihood_x_z_H0_single_event (self, event, H0, em_name, counterpart_z_array, redshift_bins_temp = 10000) :
     

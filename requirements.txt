@@ -15,3 +15,5 @@ scipy==1.8.1
 streamlit==1.14.1
 ligo.skymap==1.0.3
 seaborn==0.12.2
+bs4==4.12.0
+ligo.gracedb==2.10.0

@@ -1,16 +1,59 @@
 {
-"H0events":{
-    "GW170817_EM1_140_20":{"GW":"GW190425","EM":"EM1"},
-    "GW170817_EM2_140_20":{"GW":"GW190425","EM":"EM1"},
-    "GW291122_EM1_140_20":{"GW":"GW190425","EM":"EM1"},
-    "GW291122_EM2_140_20":{"GW":"GW190425","EM":"EM1"}
-},
-"GW_data":{
-    "GW190425":{
-        "data":{
+    "H0events":{
+        "GW170817":{
+            "GW":"GW170817",
+            "EM":["NGC4993","ESO508-24"]
+        },
+        "GW190425":{
+            "GW":"GW190425",
+            "EM":["FRB20190425A"]
+        }
+    },
+    "GW_data":{
+        "GW170817":{
+            "src":"local",
+            "id":"GW170817",
+            "display_name":"GW170817",
+            "Skymap":"GW170817_skymap.fits.gz",
+            "reference":"https://doi.org/10.1103%2FPhysRevLett.119.161101"
+        },
+        "GW190425":{
             "src":"gracedb",
-            "src-id":"S190425z"
+            "id":"S190425z",
+            "display_name":"GW190425",
+            "reference":"https://doi.org/10.7935/qf3a-3z67"
+        }
+    },
+    "EM_data":{
+        "NGC4993":{
+            "src":"local",
+            "id":"NGC4993",
+            "display_name":"NGC 4993",
+            "cz_mean":2993,
+            "cz_sigma":7,
+            "ra_deg":197.44746,
+            "dec_deg": -23.11786,
+            "reference":"https://doi.org/10.3847%2F2041-8213%2Faa91c9"
+        },
+        "ESO508-24":{
+            "src":"local",
+            "id":"ESO508-24",
+            "display_name":"ESO 508-24 (FAKE)",
+            "cz_mean":3851,
+            "cz_sigma":0.1,
+            "ra_deg":197.69140,
+            "dec_deg":-23.86572,
+            "reference":"https://vizier.cds.unistra.fr/viz-bin/VizieR-S?ESO-LV%20508-0240"
+        },
+        "FRB20190425A":{
+            "src":"local",
+            "id":"FRB20190425A",
+            "display_name":"FRB 20190425A",
+            "cz_mean":9360,
+            "cz_sigma":3,
+            "ra_deg":255.72,
+            "dec_deg":21.52,
+            "reference":"https://doi.org/10.1038/s41550-023-01917-x"
         }
     }
-}
 }

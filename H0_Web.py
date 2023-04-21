@@ -7,6 +7,8 @@ Luis Miguel Galvis E
 #Libraries
 import streamlit as st
 from H0live import *
+from numpy import where,array
+import json
 
 ###########################################
 #Session status
@@ -24,21 +26,39 @@ c1.image('https://yt3.ggpht.com/dsz-32urUxdYKd8a6A2cnmOAo7zCXBtKFXGm_eRjRdYFkqc3
 
 st.title(title)
 
+csvfile='bright_sirens.csv'
+jsonfile='bright-sirens.json'
+
 #Function to read the csv file and get the events
-def list_events(csv_file):
+def list_events_old(csv_file):
     ev1=pd.read_csv(csv_file,sep=",",engine='python')
     return ev1.columns[1:].values.tolist()
 
-evl_list = list_events('test.csv')
+class list_events:
+    def __init__(self,jsonfile):
+        jsonin=json.load(open(jsonfile))
+        self.evlist={}
+        for gwev in jsonin:
+            gwname=jsonin[gwev]['display_name']
+            self.evlist[gwname]={}
+            self.evlist[gwname]['counterpart']=[]
+            self.evlist[gwname]['column']=[]
+            for emev in jsonin[gwev]['Counterparts']:
+                emname=jsonin[gwev]['Counterparts'][emev]['display_name']
+                self.evlist[gwname]['counterpart'].append(emname)
+                self.evlist[gwname]['column'].append(jsonin[gwev]['Counterparts'][emev]['column_name'])
+        return
+    
+    def list(self):
+        return self.evlist
+    def getcolumn(self,gwev,emev):
+        print(gwev,emev,self.evlist[gwev]['counterpart'])
+        print(np.argwhere(self.evlist[gwev]['counterpart']==emev))
+        return self.evlist[gwev]['column'][np.where(np.array(self.evlist[gwev]['counterpart'])==emev)[0][0]]
 
-#Function to create the dictionary with the events and their counterparts
-dictionary={}
-
-for i in range(len(evl_list)):
-    if evl_list[i].split('_')[0] in dictionary:
-        dictionary[evl_list[i].split('_')[0]].append(evl_list[i].split('_')[1])
-    else:
-        dictionary[evl_list[i].split('_')[0]]=[evl_list[i].split('_')[1]]
+ev_list = list_events(jsonfile)
+dictionary=ev_list.list()
+print(dictionary)
 
 #To create the lists to be used
 Events=[]
@@ -53,11 +73,11 @@ with sb.form("My form"):
         if Events_in_checbox==[] and Counterpart_in_selectbox==[]:
             Events_in_checbox.append(st.checkbox(key,True))
             Events.append(key)
-            Counterpart_in_selectbox.append(st.selectbox("Counterpart ",dictionary[key],key=key,label_visibility="collapsed"))
+            Counterpart_in_selectbox.append(st.selectbox("Counterpart ",dictionary[key]['counterpart'],key=key,label_visibility="collapsed"))
         else:
             Events_in_checbox.append(st.checkbox(key))
             Events.append(key)
-            Counterpart_in_selectbox.append(st.selectbox("Counterpart ",dictionary[key],key=key,label_visibility="collapsed"))
+            Counterpart_in_selectbox.append(st.selectbox("Counterpart ",dictionary[key]['counterpart'],key=key,label_visibility="collapsed"))
     
  
 #To select the desired priors
@@ -81,7 +101,8 @@ with sb.form("My form"):
     choice_list1=[]
     for i in range(len(Events_in_checbox)):
         if Events_in_checbox[i]==True:
-            choice_list1.append(str(Events[i])+"_"+str(Counterpart_in_selectbox[i]))
+            choice_list1.append(ev_list.getcolumn(Events[i],str(Counterpart_in_selectbox[i])))
+            # choice_list1.append(str(Events[i])+"_"+str(Counterpart_in_selectbox[i]))
 
 
      
@@ -100,8 +121,9 @@ else:
     choice_list2=[]
 
     if not Calculated:
-        choice_list2.append(str(Events[0])+"_"+str(dictionary[Events[0]][0]))
-        h0live_output=H0live(choice_list2, choice,planck=c_levels_choice[0],riess=c_levels_choice[1],likelihood_plot=individual_L_choice,data_download=True)
+        # choice_list2.append(str(Events[0])+"_"+str(dictionary[Events[0]][0]))
+        choice_list2.append(ev_list.getcolumn(Events[0],str(Counterpart_in_selectbox[0])))
+        h0live_output=H0live(choice_list2, choice,planck=c_levels_choice[0],riess=c_levels_choice[1],likelihood_plot=individual_L_choice,data_download=True,likelihood_fname=csvfile)
         csv = h0live_output.H0data_download.to_csv(index=False)
                 
         sb.download_button(
@@ -112,7 +134,7 @@ else:
         key='download-csv')  
 #If events are selected
     if Calculated:
-        st.session_state.object=H0live(choice_list1, choice,planck=c_levels_choice[0],riess=c_levels_choice[1],likelihood_plot=individual_L_choice,data_download=True)
+        st.session_state.object=H0live(choice_list1, choice,planck=c_levels_choice[0],riess=c_levels_choice[1],likelihood_plot=individual_L_choice,data_download=True,likelihood_fname=csvfile)
         csv = st.session_state.object.H0data_download.to_csv(index=False)
         a=sb.download_button(
         "Download csv file",
@@ -124,7 +146,7 @@ else:
 #To work outside of form without disappearing the image
     if not Calculated:
         if st.session_state.object is not None:
-            h0live_output=H0live(choice_list1, choice,planck=c_levels_choice[0],riess=c_levels_choice[1],likelihood_plot=individual_L_choice,data_download=True)
+            h0live_output=H0live(choice_list1, choice,planck=c_levels_choice[0],riess=c_levels_choice[1],likelihood_plot=individual_L_choice,data_download=True,likelihood_fname=csvfile)
             csv = h0live_output.H0data_download.to_csv(index=False)
             b=sb.download_button(
             "Download csv file",
