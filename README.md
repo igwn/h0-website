@@ -5,7 +5,7 @@ This app takes distance measurements from LIGO-Virgo-KAGRA measurements of gravi
 This is not intended for scientific purposes, but to get a "quick look" at the estimated 
 
 ## Web-interface
-Prototype at https://h0-constant-ligo.streamlit.app/
+Prototype at https://h0-lvk.streamlit.app/
 
 ## Data Processing
 * process_events.py
