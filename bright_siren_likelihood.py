@@ -15,28 +15,10 @@ from ligo.skymap.io.fits import read_sky_map
 import pandas as pd
 import json
 
-
-
-class RedshiftEvolutionModel :
-    def __init__ (self, gamma=4.59, k=2.86, zp=2.47) :
-        self.gamma = gamma
-        self.k = k
-        self.zp = zp
-        
-    def RedshiftEvolutionPowerLaw (self, z) :
-        return (1+z)**(self.gamma)
-
-    def RedshiftEvolutionMadau (self, z) :
-        C = 1+(1+self.zp)**(-self.gamma-self.k)
-        return C*((1+z)**self.gamma)/(1+((1+z)/(1+self.zp))**(self.gamma+self.k))
-        
-    def RedshiftEvolutionConstant (self, z) :
-        return 1
-            
             
 class H0likelihood :
 
-    def __init__ (self, bright_siren_information, Om0=0.3, H0min=20, H0max=140, H0bins=100, redshift_bins = 10000, filename="test.csv", zcut=None, redshift_evolution= None, gamma=None, k=None, zp=None) :
+    def __init__ (self, bright_siren_information, Om0=0.3, H0min=20, H0max=140, H0bins=100, redshift_bins = 10000, filename="test.csv", zcut=None) :
 
         # redshift-luminosity distance relation
         cosmoref = FlatLambdaCDM(H0=70, Om0=Om0, Tcmb0=2.725)
@@ -53,21 +35,6 @@ class H0likelihood :
         self.H0bins = H0bins
         self.H0_array = np.linspace ( H0min, H0max, self.H0bins)
         self.Om0 = Om0
-
-        if redshift_evolution=='PowerLaw' :
-            if gamma is not None:
-                self.model = RedshiftEvolutionModel (gamma=gamma).RedshiftEvolutionPowerLaw
-            else :
-                self.model = RedshiftEvolutionModel().RedshiftEvolutionPowerLaw	
-        elif redshift_evolution=='Madau' :
-            if gamma is not None and k is not None and zp is not None:
-                self.model = RedshiftEvolutionModel (gamma=gamma, k=k, zp=zp).RedshiftEvolutionMadau
-            else :
-                self.model = RedshiftEvolutionModel().RedshiftEvolutionMadau
-        elif redshift_evolution is None:
-            self.model = RedshiftEvolutionModel().RedshiftEvolutionConstant
-            
-        print(f'Assuming a {redshift_evolution} redshift evolution model')
         
         with open(bright_siren_information, "r") as bright_siren_info:
             bright_siren_information_dictionary = json.load(bright_siren_info)
@@ -105,8 +72,7 @@ class H0likelihood :
                 counterpart_pdf = truncnorm (a,5, counterpart_muz, counterpart_sigmaz).pdf (counterpart_z_array)
         
                 # redshift prior
-                dVc_by_dz = diff_comoving_vol (counterpart_z_array)
-                pz = self.model (counterpart_z_array)*dVc_by_dz/(1+counterpart_z_array)
+                pz = np.power(counterpart_z_array, 2)
         
                 # likelihood in luminosity distance from skymap
                 distmu_los = distmu [counterpart_pix]
