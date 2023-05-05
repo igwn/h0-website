@@ -9,7 +9,7 @@ import healpy as hp
 from scipy.stats import norm, truncnorm
 from scipy.integrate import simpson
 from scipy.interpolate import interp1d
-from astropy.cosmology import FlatLambdaCDM
+#from astropy.cosmology import FlatLambdaCDM
 from astropy import constants as const, units as u
 from ligo.skymap.io.fits import read_sky_map
 import pandas as pd
@@ -21,9 +21,9 @@ class H0likelihood :
     def __init__ (self, bright_siren_information, Om0=0.3, H0min=20, H0max=140, H0bins=100, redshift_bins = 10000, filename="test.csv", zcut=None) :
 
         # redshift-luminosity distance relation
-        cosmoref = FlatLambdaCDM(H0=70, Om0=Om0, Tcmb0=2.725)
-        if zcut is None :
-            zcut = 10
+        #cosmoref = FlatLambdaCDM(H0=70, Om0=Om0, Tcmb0=2.725)
+        #if zcut is None :
+        #    zcut = 10
         #zref = np.arange (0,zcut+0.01,0.01)
         #dlref = cosmoref.luminosity_distance (zref).value
         #self.dlH02z = interp1d (dlref*70, zref)
@@ -105,7 +105,7 @@ class H0likelihood :
     
     def likelihood_x_z_H0_single_event (self, event, H0, em_name, counterpart_z_array, redshift_bins_temp = 10000) :
     
-        cosmo = FlatLambdaCDM(H0=H0, Om0=self.Om0, Tcmb0=2.725)
+        #cosmo = FlatLambdaCDM(H0=H0, Om0=self.Om0, Tcmb0=2.725)
         zmin = self.dlGWmin*H0/self.cavl #self.dlH02z(self.dlGWmin*H0) *0.5
         zmax = self.dlGWmax*H0/self.cavl #self.dlH02z(self.dlGWmax*H0) *2
             
