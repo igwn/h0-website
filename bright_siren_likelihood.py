@@ -9,7 +9,6 @@ import healpy as hp
 from scipy.stats import norm, truncnorm
 from scipy.integrate import simpson
 from scipy.interpolate import interp1d
-from astropy.cosmology import FlatLambdaCDM
 from astropy import constants as const, units as u
 from ligo.skymap.io.fits import read_sky_map
 import pandas as pd
@@ -18,23 +17,13 @@ import json
             
 class H0likelihood :
 
-    def __init__ (self, bright_siren_information, Om0=0.3, H0min=20, H0max=140, H0bins=100, redshift_bins = 10000, filename="test.csv", zcut=None) :
-
-        # redshift-luminosity distance relation
-        cosmoref = FlatLambdaCDM(H0=70, Om0=Om0, Tcmb0=2.725)
-        if zcut is None :
-            zcut = 10
-        zref = np.arange (0,zcut+0.01,0.01)
-        dlref = cosmoref.luminosity_distance (zref).value
-        self.dlH02z = interp1d (dlref*70, zref)
-        diff_comoving_vol = interp1d(zref, cosmoref.differential_comoving_volume(zref).to(u.Gpc**3 / u.sr).value)
+    def __init__ (self, bright_siren_information, H0min=20, H0max=140, H0bins=100, redshift_bins = 10000, filename="test.csv", zcut=None) :
         
-        cval = const.c.to('km/s').value
+        self.cval = const.c.to('km/s').value
         
         # H0 array
         self.H0bins = H0bins
         self.H0_array = np.linspace ( H0min, H0max, self.H0bins)
-        self.Om0 = Om0
         
         with open(bright_siren_information, "r") as bright_siren_info:
             bright_siren_information_dictionary = json.load(bright_siren_info)
@@ -65,8 +54,8 @@ class H0likelihood :
                 counterpart_pix = hp.ang2pix (nside, np.pi/2 - counterpart_dec, counterpart_ra, nest=True)
             
                 # counterpart information
-                counterpart_muz = bright_siren_information_dictionary [event] ['Counterparts'] [em_info] ["Parameters"] ["counterpart_cz"]/cval
-                counterpart_sigmaz =  bright_siren_information_dictionary [event] ['Counterparts'] [em_info] ["Parameters"] ["counterpart_sigma_cz"]/cval
+                counterpart_muz = bright_siren_information_dictionary [event] ['Counterparts'] [em_info] ["Parameters"] ["counterpart_cz"]/self.cval
+                counterpart_sigmaz =  bright_siren_information_dictionary [event] ['Counterparts'] [em_info] ["Parameters"] ["counterpart_sigma_cz"]/self.cval
                 a = (0.0 - counterpart_muz) / counterpart_sigmaz
                 counterpart_z_array = np.linspace (0.5*counterpart_muz, 2*counterpart_muz, redshift_bins)
                 counterpart_pdf = truncnorm (a,5, counterpart_muz, counterpart_sigmaz).pdf (counterpart_z_array)
@@ -106,12 +95,11 @@ class H0likelihood :
     
     def likelihood_x_z_H0_single_event (self, event, H0, em_name, counterpart_z_array, redshift_bins_temp = 10000) :
     
-        cosmo = FlatLambdaCDM(H0=H0, Om0=self.Om0, Tcmb0=2.725)
-        zmin = self.dlH02z(self.dlGWmin*H0) *0.5
-        zmax = self.dlH02z(self.dlGWmax*H0) *2
+        zmin = self.dlGWmin*H0/self.cavl 
+        zmax = self.dlGWmax*H0/self.cavl 
             
         zGW_array_temp = np.linspace (zmin,zmax,redshift_bins_temp)
-        dl_array_temp = cosmo.luminosity_distance (zGW_array_temp).value
+        dl_array_temp = self.cval*zGW_array_temp/H0 
         
         likelihood_x_z_H0= self.bright_siren_dictionary [event] [em_name] ["likelihood"].pdf(dl_array_temp)
         likelihood_x_z_H0 /= simpson (likelihood_x_z_H0, zGW_array_temp)
