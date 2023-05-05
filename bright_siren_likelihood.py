@@ -27,7 +27,6 @@ class H0likelihood :
         zref = np.arange (0,zcut+0.01,0.01)
         dlref = cosmoref.luminosity_distance (zref).value
         self.dlH02z = interp1d (dlref*70, zref)
-        diff_comoving_vol = interp1d(zref, cosmoref.differential_comoving_volume(zref).to(u.Gpc**3 / u.sr).value)
         
         cval = const.c.to('km/s').value
         
