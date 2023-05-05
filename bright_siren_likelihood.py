@@ -24,11 +24,11 @@ class H0likelihood :
         cosmoref = FlatLambdaCDM(H0=70, Om0=Om0, Tcmb0=2.725)
         if zcut is None :
             zcut = 10
-        zref = np.arange (0,zcut+0.01,0.01)
-        dlref = cosmoref.luminosity_distance (zref).value
-        self.dlH02z = interp1d (dlref*70, zref)
+        #zref = np.arange (0,zcut+0.01,0.01)
+        #dlref = cosmoref.luminosity_distance (zref).value
+        #self.dlH02z = interp1d (dlref*70, zref)
         
-        cval = const.c.to('km/s').value
+        self.cval = const.c.to('km/s').value
         
         # H0 array
         self.H0bins = H0bins
@@ -64,8 +64,8 @@ class H0likelihood :
                 counterpart_pix = hp.ang2pix (nside, np.pi/2 - counterpart_dec, counterpart_ra, nest=True)
             
                 # counterpart information
-                counterpart_muz = bright_siren_information_dictionary [event] ['Counterparts'] [em_info] ["Parameters"] ["counterpart_cz"]/cval
-                counterpart_sigmaz =  bright_siren_information_dictionary [event] ['Counterparts'] [em_info] ["Parameters"] ["counterpart_sigma_cz"]/cval
+                counterpart_muz = bright_siren_information_dictionary [event] ['Counterparts'] [em_info] ["Parameters"] ["counterpart_cz"]/self.cval
+                counterpart_sigmaz =  bright_siren_information_dictionary [event] ['Counterparts'] [em_info] ["Parameters"] ["counterpart_sigma_cz"]/self.cval
                 a = (0.0 - counterpart_muz) / counterpart_sigmaz
                 counterpart_z_array = np.linspace (0.5*counterpart_muz, 2*counterpart_muz, redshift_bins)
                 counterpart_pdf = truncnorm (a,5, counterpart_muz, counterpart_sigmaz).pdf (counterpart_z_array)
@@ -106,11 +106,11 @@ class H0likelihood :
     def likelihood_x_z_H0_single_event (self, event, H0, em_name, counterpart_z_array, redshift_bins_temp = 10000) :
     
         cosmo = FlatLambdaCDM(H0=H0, Om0=self.Om0, Tcmb0=2.725)
-        zmin = self.dlH02z(self.dlGWmin*H0) *0.5
-        zmax = self.dlH02z(self.dlGWmax*H0) *2
+        zmin = self.dlGWmin*H0/self.cavl #self.dlH02z(self.dlGWmin*H0) *0.5
+        zmax = self.dlGWmax*H0/self.cavl #self.dlH02z(self.dlGWmax*H0) *2
             
         zGW_array_temp = np.linspace (zmin,zmax,redshift_bins_temp)
-        dl_array_temp = cosmo.luminosity_distance (zGW_array_temp).value
+        dl_array_temp = self.cval*zGW_array_temp/H0 #cosmo.luminosity_distance (zGW_array_temp).value
         
         likelihood_x_z_H0= self.bright_siren_dictionary [event] [em_name] ["likelihood"].pdf(dl_array_temp)
         likelihood_x_z_H0 /= simpson (likelihood_x_z_H0, zGW_array_temp)
