@@ -117,7 +117,7 @@ with sb.form("My form"):
 #When no event is selected
 if choice_list1==[]:
     if  Calculated or not Calculated:
-        st.write(r"Please select an event and its counterpart.")
+        st.header(":red[Please select an event and its counterpart!]")
 
     
 
@@ -125,7 +125,7 @@ if choice_list1==[]:
 else:
     choice_list2=[]
 
-    if not Calculated:
+    if not Calculated and st.session_state.object is None:
         # choice_list2.append(str(Events[0])+"_"+str(dictionary[Events[0]][0]))
         choice_list2.append(ev_list.getcolumn(Events[0],str(Counterpart_in_selectbox[0])))
         h0live_output=H0live(choice_list2, choice,planck=add_values_choice[0],riess=add_values_choice[1],likelihood_plot=add_values_choice[2],data_download=True,likelihood_fname=csvfile)
@@ -142,23 +142,22 @@ else:
         st.session_state.object=H0live(choice_list1, choice,planck=add_values_choice[0],riess=add_values_choice[1],likelihood_plot=add_values_choice[2],data_download=True,likelihood_fname=csvfile)
         csv = st.session_state.object.H0data_download.to_csv(index=False)
         a=sb.download_button(
-        "Download csv file",
+        "Download data",
         csv,
         "file.csv",
         "text/csv",
         key='download-csv')     
         
 #To work outside of form without disappearing the image
-    if not Calculated:
-        if st.session_state.object is not None:
-            h0live_output=H0live(choice_list1, choice,planck=add_values_choice[0],riess=add_values_choice[1],likelihood_plot=add_values_choice[2],data_download=True,likelihood_fname=csvfile)
-            csv = h0live_output.H0data_download.to_csv(index=False)
-            b=sb.download_button(
-            "Download csv file",
-            csv,
-            "file.csv",
-            "text/csv",
-            key='download-csv')  
+    if not Calculated and st.session_state.object is not None:
+        h0live_output=H0live(choice_list1, choice,planck=add_values_choice[0],riess=add_values_choice[1],likelihood_plot=add_values_choice[2],data_download=True,likelihood_fname=csvfile)
+        csv = h0live_output.H0data_download.to_csv(index=False)
+        b=sb.download_button(
+        "Download data",
+        csv,
+        "file.csv",
+        "text/csv",
+        key='download-csv')  
 
 # To add the information about the website
 #sb.header("Related information")
