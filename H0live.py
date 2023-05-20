@@ -50,19 +50,21 @@ class H0live :
         with _lock :
             fig = plt.figure()
             
+            # combined posterior and prior plot
+            plt.plot (self.H0_array, pH0_normalized, lw=2.5, color=c[9], label="Combined Posterior")
+            plt.plot (self.H0_array, self.prior(), ls="--", color=c[8], lw=2, label="Prior")
+            plt.axvline (H0map, color=c[9], lw=2, ls=':')
+            plt.axvline (H0low, color=c[9], lw=2, ls=':')
+            plt.axvline (H0high, color=c[9], lw=2, ls=':')
+            
+            
             # individual likelihood plot
             if likelihood_plot is True :
                 for ee, event in enumerate(events) :
                     likelihood_event_normalized = self.normalize(likelihood_events_sel [ee], self.H0_array)
                     plt.plot (self.H0_array, likelihood_event_normalized, lw=2.5, color=c[ee], label=event)
-            else :
-                ee = -1
             
-            plt.plot (self.H0_array, pH0_normalized, lw=2.5, color=c[ee+1], label="Combined Posterior")
-            plt.plot (self.H0_array, self.prior(), ls="--", color=c[ee+2], lw=2, alpha=0.8, label="Prior")
-            plt.axvline (H0map, color=c[ee+3], lw=2, alpha=0.7)
-            plt.axvline (H0low, color=c[ee+3], lw=2, alpha=0.7)
-            plt.axvline (H0high, color=c[ee+3], lw=2, alpha=0.7)
+
             
             # Planck
             if planck is True :
