@@ -19,7 +19,7 @@ if 'object' not in st.session_state:
 
 sb = st.sidebar
 
-st.title('$H_0$ GW estimator')
+st.title('$H_0$ estimator')
 
 #add columns for subtitle and LOGO.
 col1, col2 = st.columns([7, 2])
@@ -95,7 +95,7 @@ with sb.form("My form"):
 
 #To select additional H0 estimates and the plot of Individual event likelihoods 
     st.subheader("Additional values")
-    add_values=['Planck H0 estimate', 'SHOES H0 estimate', 'Individual event likelihoods']
+    add_values=['Planck H0 estimate', 'SH0ES H0 estimate', 'Individual event likelihoods']
     add_values_choice=[]
     for i in range(len(add_values)):
         add_values_choice.append(st.checkbox(add_values[i])) 
@@ -177,71 +177,59 @@ else:
 #sb.markdown(
 #    "How can GW be used to estimate H0? : [Measuring the Expansion of the Universe with Gravitational Waves](https://www.ligo.org/science/Publication-GW170817Hubble/)")
 
-st.subheader('How fast is the Universe expanding?')
 st.markdown("""
-            Astronomers measure this with the “Hubble constant”, measured by comparing the apparent 
-            velocity of objects with their distance as the space between them and us stretches. 
-            These can be hard to measure, so astronomers normally estimate the likelihood that any 
-            given value is correct. 
-            The plot above shows the estimate of how likely a given value of the Hubble Constant (often 
-            called $H_0$) is based on gravitational wave (GW) and their counterparts detected using 
-            electromagnetic (EM) waves. Use the sidebar on the left to select which events, and which 
-            counterparts, you want to include in your estimate and update the plot. 
+            **Did you know that gravitational waves can be used to measure the expansion of the Universe? 
+            This plot shows one estimate - change the assumptions and events included to update the estimate.**
             """)
 
+
 st.divider()
-st.subheader('How results are constructed?')
+st.header('What is the Hubble constant?')
 st.markdown("""
-            Gravitational Wave observations LIGO, Virgo and KAGRA allow astronomers make an estimate of 
-            the distance to any particular event. With multiple detectors (preferably three or more) it’s 
-            also possible to identify roughly where on the sky the event is. Other astronomers, using 
-            telescopes sensitive to electromagnetic waves with wavelengths from radio to gamma rays, 
-            including optical light, can look for any new sources of light in the sky at that location. 
-            If they find a new source which matches the time and location of the gravitational wave source,
-            and can pinpoint the exact galaxy, then it’s possible to determine how fast that galaxy appears 
-            to be moving away due to the expansion of the Universe. 
+            The Hubble constant, $H_0$, is a measure of how fast our universe is expanding. As the universe expands, objects such as galaxies get further apart. From Earth, the galaxies appear to be moving away from us. The speed at which they do so is known as their "recession velocity" ($v$), and it is directly proportional to their distance ($D$) from us: $v = H_0 D$
+            
+            This is known as the Hubble–Lemaître law, and the constant of proportionality is the Hubble constant. It is usually measured in km/s/Mpc (kilometers per second per megaparsec, where a megaparsec is just over 3 million light years), and today we know that it has a value of about 70 km/s/Mpc. This means that for every Mpc of distance from us, a galaxy’s recession velocity increases by around 70 km/s.
+            """)
+            
 
-            By dividing the apparent velocity (in km/s) by the distance to the source (in Megaparsecs, or 
-            Mpc, where 1 Mpc is just over 3 million light years) we can calculate the expansion rate. First 
-            publicised by Edwin Hubble, this is called the Hubble constant, and is measured in units of 
-            “km/s per Mpc” and a typical value is around 70 km/s/Mpc - i.e. for every Mpc of distance from 
-            us, a galaxy’s apparent velocity increases by around 70 km/s.
-
-            Other techniques, using supernova explosions (the SH0ES survey) and measurements of the very 
-            early Universe (the Planck satellite), currently disagree with each other, with values of 
-            around 73 km/s/Mpc and 67 km/s/Mpc respectively (which you can add to the plot if you like). 
-            Gravitational waves, by making an independent measurement of the distance, might be able to 
+st.subheader('Why use gravitational waves to measure $H_0$?')
+st.markdown("""
+            Other techniques for measuring the Hubble constant, such as using Type IA supernovae (by e.g. the SH0ES Collaboration) and measurements of the very early Universe (by e.g. the Planck Collaboration), currently disagree with each other, with values of around 73 km/s/Mpc and 67 km/s/Mpc respectively (which you can add to the plot if you like). 
+            Gravitational waves, by making an independent measurement of the Hubble constant, might be able to 
             shed light on this apparent discrepancy.
-
-            The challenge is, existing gravitational wave detectors don’t measure the distance very 
-            precisely - only to around a factor of two - and we may not identify exactly which galaxy it 
-            originated from. That means that we can use knowledge of the statistics of the measurements to 
-            calculate how likely it is that a given value of the Hubble constant based on the gravitational 
-            wave and electromagnetic wave measurements. 
-
-            The likelihoods also depend on which events, and which counterparts, you decide to include, 
-            which you can select in the left sidebar.
             """)
-
+            
 st.divider()
-st.subheader('This is only a public, preliminary, scientifically inaccurate result')
+st.header('How do you measure the Hubble constant using gravitational waves?')
 st.markdown("""
-            The estimates of the Hubble Constant provided here are not intended to be a fully 
-            scientifically accurate estimate. That’s because when cosmologists do this properly, 
-            they are very careful with what prior assumptions they are making, and exactly how they 
-            compute the $H_0$ value. The information here comes from the publicly available data published 
-            by the LIGO-Virgo-KAGRA collaboration, as well as publicly available data from EM counterpart 
-            measurements. Cosmologists may also include different estimates of the likelihood of whether 
-            a particular event corresponds to its counterpart, which this website does not do. There are 
-            also sometimes different measurements of the apparent velocities of galaxies, which can change 
-            the answer. 
-
-            Anyone wishing to make their own estimate for scientific purposes should use the source data 
-            at GraceDB for gravitational waves, and any one of a number of catalogues for electromagnetic 
-            observations.
+            Gravitational wave observations of merging black holes and neutron stars by [Advanced LIGO](https://www.ligo.org/about.php), [Virgo](https://www.virgo-gw.eu/) and [KAGRA](https://gwcenter.icrr.u-tokyo.ac.jp/en/) provide us with a direct measurement of their luminosity distance ($D_L$).
+            
+            In the nearby universe, the Hubble–Lemaître law can be rewritten in terms of luminosity distance and redshift ($z$) as $c z ≈ H_0 D_L$, where $c$ is the speed of light. 
+            
+            If the gravitational wave is well localised on the sky astronomers can use their telescopes to search this area for any electromagnectic (EM) signals produced by the merging objects, covering wavelengths from radio to gamma rays. If an EM counterpart is detected, it can be used to identify the host galaxy of the gravitational wave, and then the redshift of that galaxy can be used in combination with the GW distance to measure $H_0$!
+            
+            There are large uncertainties on the distance measured by the GW detectors -- usually around 30%. This means that the measurement of $H_0$ from a single GW event will have a large uncertainty associated with it. However, by combining the results from multiple GW-EM observations, these uncertainties will decrease, leading to a more informative measurement. The plot above shows a quick estimate of the Hubble constant based on the selected GW and EM events. Try changing the GW events and EM counterparts which are selected to see how the estimate changes.
             """)
 
+st.subheader('The assumptions used in this website')
+st.markdown("""
+            This website only uses publicly available GW and EM data. The GW data comes in the form of skymaps from [GraceDB](https://gracedb.ligo.org/). These provide an estimate of the 3D localisation of the GW event, in the form of a sky probability and Gaussian distance estimate for every line-of-sight. This information is produced from a preliminary, "quick" analysis of the GW event, and will differ from the final volume localisation produced by the LVK for this event. This means that, while the distance estimate will be in the right ballpark, the shape of the distance distribution, including its peak and width, is likely to change with later analyses.
+            
+            A number of other simplifying assumptions are made to produce the estimate above. The linear Hubble relation written above is only valid in the local universe, but is used throughout this analysis, meaning that for higher distance events the result will be less reliable. This allows us to approximate GW selection effects as $∝ H_0^3$, which means we can ignore the impact of detector sensitivity and the GW mass distribution (among other things), which are required to accurately estimate this.
+            
+            This website neglects the impact of galaxy peculiar velocity can have on the result. Galaxy motion not due to the expansion of the universe is known as its peculiar velocity, and can have a large impact on the galaxy's measured redshift, especially for galaxies which are relatively nearby to us. This website also treats the selected EM counterparts as if they are confidently associated with the GW event, and does not take into account any uncertainty in the association.
+            """)
+
+
 st.divider()
+st.header('Additional information')
+st.markdown("""
+            The values of the Hubble constant provided here are not intended to be scientifically accurate estimates. This website is intended to be an educational resource. For the latest official measurement of the Hubble constant from the LVK collaboration, look out for the [latest LVK publications](https://pnp.ligo.org/ppcomm/Papers.html).
+            
+            If you have questions about gravitational wave science, please visit [https://ask.igwn.org](https://ask.igwn.org).
+            """)
+
+
 st.subheader('How to cite this website?')
 st.markdown("""
             If you would like to use the plot on this website, then please do so. Please quote the URL, 
@@ -249,19 +237,8 @@ st.markdown("""
             use the same events that you have selected, and that the options may change over time.
             """)
 
-st.divider()
-st.subheader('Additional information')
-st.markdown("""
-            If you have questions about this, please visit https://ask.igwn.org
-
-            What are [LIGO](https://www.ligo.org/about.php), [Virgo](https://www.virgo-gw.eu/) and [KAGRA](https://gwcenter.icrr.u-tokyo.ac.jp/en/)?
-
-            **How can GW be used to estimate H0?:** [Measuring the Expansion of the Universe with Gravitational Waves](https://www.ligo.org/science/Publication-GW170817Hubble/)
 
 
-            """)
-
-st.divider()
 st.subheader('Credits and contacts')
 st.markdown("""
             The website is provided on behalf of the LIGO-Virgo-KAGRA collaboration. It was developed by <>. 
