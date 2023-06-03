@@ -63,17 +63,16 @@ class H0live :
             plt.axvline (H0low, color=c[9], lw=2, ls=':')
             plt.axvline (H0high, color=c[9], lw=2, ls=':')
             
-            # Planck
+            # Planck: https://arxiv.org/abs/1807.06209
             if planck is True :
-		# See, https://arxiv.org/abs/1807.06209
                 planck_H0_value = 67.4
                 planck_H0_sigma = 0.5
                 plt.fill_betweenx([ymin,ymax], planck_H0_value-planck_H0_sigma, planck_H0_value+planck_H0_sigma, color=c[7], alpha=0.6, label="Planck") 
                 
-            #SH0ES
+            #SH0ES: https://arxiv.org/abs/1903.07603
             if riess is True :
-                riess_H0_value = 73.24
-                riess_H0_sigma = 1.74
+                riess_H0_value = 74.03
+                riess_H0_sigma = 1.42
                 plt.fill_betweenx([ymin,ymax], riess_H0_value-riess_H0_sigma, riess_H0_value+riess_H0_sigma, color=c[6], alpha=0.6, label="SH0ES")     
     
             plt.xlim (self.H0_array[0],self.H0_array[-1])
