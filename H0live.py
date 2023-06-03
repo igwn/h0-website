@@ -65,8 +65,9 @@ class H0live :
             
             # Planck
             if planck is True :
-                planck_H0_value = 67.74
-                planck_H0_sigma = 0.62
+		# See, https://arxiv.org/abs/1807.06209
+                planck_H0_value = 67.4
+                planck_H0_sigma = 0.5
                 plt.fill_betweenx([ymin,ymax], planck_H0_value-planck_H0_sigma, planck_H0_value+planck_H0_sigma, color=c[7], alpha=0.6, label="Planck") 
                 
             #SH0ES
