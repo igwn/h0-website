@@ -75,7 +75,7 @@ class H0likelihood :
                 # minimum and maximum distance of GW event
                 self.dlGWmin = distmu_los - 5*distsigma_los
                 self.dlGWmax = distmu_los + 5*distsigma_los
-                if self.dlGWmin <=0 :
+                if self.dlGWmin <0 :
                     self.dlGWmin = 0
             
             
