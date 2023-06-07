@@ -47,6 +47,10 @@ class H0likelihood :
             
                 # skymap
                 (prob, distmu, distsigma, distnorm), metadata = read_sky_map (skymap, distances=True, moc=False, nest=True)
+                if metadata['creator']=='ligo-skymap-from-samples':
+                    dl_prior = bilby.gw.prior.UniformSourceFrame(minimum=100.0, maximum=5000.0, name='luminosity_distance', unit='Mpc')
+                elif metadata['creator']=='BAYESTAR':
+                    dl_prior = bilby.gw.prior.PowerLaw(alpha=2, minimum=100.0, maximum=5000.0, name='luminosity_distance', unit='Mpc')
             
                 # pixel corresponding to sky position of identified galaxy	
                 npix = len(prob)
@@ -66,7 +70,7 @@ class H0likelihood :
                 # likelihood in luminosity distance from skymap
                 distmu_los = distmu [counterpart_pix]
                 distsigma_los = distsigma [counterpart_pix]
-                likelihood_x_dl_skymap = norm (distmu_los, distsigma_los) 
+                posterior_x_dl_skymap = norm (distmu_los, distsigma_los) 
 
                 # minimum and maximum distance of GW event
                 self.dlGWmin = distmu_los - 5*distsigma_los
@@ -78,8 +82,9 @@ class H0likelihood :
                 self.bright_siren_dictionary [event] [em_name] = {}
                 self.bright_siren_dictionary [event] [em_name] ["counterpart_z_array"] = counterpart_z_array
                 self.bright_siren_dictionary [event] [em_name] ["counterpart_pdf"] = counterpart_pdf
-                self.bright_siren_dictionary [event] [em_name] ["likelihood"] = likelihood_x_dl_skymap
+                self.bright_siren_dictionary [event] [em_name] ["posterior"] = posterior_x_dl_skymap
                 self.bright_siren_dictionary [event] [em_name] ["z_prior"] = pz
+                self.bright_siren_dictionary [event] [em_name] ["dl_prior"] = dl_prior
 
                 self.dl_out[event][em_name]={'dist_mean':distmu_los,'dist_sigma':distsigma_los}
 
@@ -101,7 +106,7 @@ class H0likelihood :
         zGW_array_temp = np.linspace (zmin,zmax,redshift_bins_temp)
         dl_array_temp = self.cval*zGW_array_temp/H0 
         
-        likelihood_x_z_H0= self.bright_siren_dictionary [event] [em_name] ["likelihood"].pdf(dl_array_temp)
+        likelihood_x_z_H0= self.bright_siren_dictionary [event] [em_name] ["posterior"].pdf(dl_array_temp)/self.bright_siren_dictionary [event] [em_name] ["dl_prior"].prob(dl_array_temp)
         likelihood_x_z_H0 /= simpson (likelihood_x_z_H0, zGW_array_temp)
         
         px_z_H0_interp = interp1d(zGW_array_temp,likelihood_x_z_H0,kind="linear",bounds_error=False,fill_value=0)
