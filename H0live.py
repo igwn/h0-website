@@ -54,7 +54,7 @@ class H0live :
             if likelihood_plot is True :
                 for ee, event in enumerate(events) :
                     likelihood_event_normalized = self.normalize(likelihood_events_sel [ee], self.H0_array)
-                    plt.plot (self.H0_array, likelihood_event_normalized, lw=2.5, color=c[ee], label=event)
+                    plt.plot (self.H0_array, likelihood_event_normalized, lw=1.5, color=c[ee], label=event)
             
             # combined posterior and prior plot
             plt.plot (self.H0_array, pH0_normalized, lw=2.5, color=c[9], label="Combined Posterior")
@@ -77,12 +77,12 @@ class H0live :
     
             plt.xlim (self.H0_array[0],self.H0_array[-1])
             plt.ylim (ymin, ymax)
-            plt.xlabel (r"$H_{0}$", size=15)
+            plt.xlabel (r"$H_{0} {\rm \ (km\ s^{-1}\ Mpc^{-1})}$", size=15)
             plt.ylabel (r"$p(H_{0})$", size=15)
             plt.title (r"$H_{0}=%.2f^{+%.2f}_{-%.2f}\ {\rm km\ s^{-1}\ Mpc^{-1}} (%d %s {\rm CI})$"
         %(H0map, H0high-H0map, H0map-H0low, level*100, r"$%$"))
             plt.tick_params(labelsize=12, direction='in')
-            plt.legend (fontsize=11)
+            plt.legend (fontsize=8)
             plt.tight_layout ()
 
             st.pyplot(fig, clear_figure=True)
