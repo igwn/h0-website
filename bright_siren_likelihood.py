@@ -48,9 +48,9 @@ class H0likelihood :
                 # skymap
                 (prob, distmu, distsigma, distnorm), metadata = read_sky_map (skymap, distances=True, moc=False, nest=True)
                 if metadata['creator']=='ligo-skymap-from-samples':
-                    dl_prior = bilby.gw.prior.UniformSourceFrame(minimum=100.0, maximum=5000.0, name='luminosity_distance', unit='Mpc')
+                    dl_prior = bilby.gw.prior.UniformSourceFrame(minimum=0.0, maximum=5000.0, name='luminosity_distance', unit='Mpc')
                 elif metadata['creator']=='BAYESTAR':
-                    dl_prior = bilby.gw.prior.PowerLaw(alpha=2, minimum=100.0, maximum=5000.0, name='luminosity_distance', unit='Mpc')
+                    dl_prior = bilby.gw.prior.PowerLaw(alpha=2, minimum=0.0, maximum=5000.0, name='luminosity_distance', unit='Mpc')
             
                 # pixel corresponding to sky position of identified galaxy	
                 npix = len(prob)
@@ -76,7 +76,7 @@ class H0likelihood :
                 self.dlGWmin = distmu_los - 5*distsigma_los
                 self.dlGWmax = distmu_los + 5*distsigma_los
                 if self.dlGWmin <0 :
-                    self.dlGWmin = 0
+                    self.dlGWmin = 1e-3
             
             
                 self.bright_siren_dictionary [event] [em_name] = {}
