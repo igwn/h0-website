@@ -13,7 +13,7 @@ from astropy import constants as const, units as u
 from ligo.skymap.io.fits import read_sky_map
 import pandas as pd
 import json
-
+import bilby
             
 class H0likelihood :
 
@@ -48,9 +48,9 @@ class H0likelihood :
                 # skymap
                 (prob, distmu, distsigma, distnorm), metadata = read_sky_map (skymap, distances=True, moc=False, nest=True)
                 if metadata['creator']=='ligo-skymap-from-samples':
-                    dl_prior = bilby.gw.prior.UniformSourceFrame(minimum=100.0, maximum=5000.0, name='luminosity_distance', unit='Mpc')
+                    dl_prior = bilby.gw.prior.UniformSourceFrame(minimum=0.0, maximum=5000.0, name='luminosity_distance', unit='Mpc')
                 elif metadata['creator']=='BAYESTAR':
-                    dl_prior = bilby.gw.prior.PowerLaw(alpha=2, minimum=100.0, maximum=5000.0, name='luminosity_distance', unit='Mpc')
+                    dl_prior = bilby.gw.prior.PowerLaw(alpha=2, minimum=0.0, maximum=5000.0, name='luminosity_distance', unit='Mpc')
             
                 # pixel corresponding to sky position of identified galaxy	
                 npix = len(prob)
@@ -76,7 +76,7 @@ class H0likelihood :
                 self.dlGWmin = distmu_los - 5*distsigma_los
                 self.dlGWmax = distmu_los + 5*distsigma_los
                 if self.dlGWmin <0 :
-                    self.dlGWmin = 0
+                    self.dlGWmin = 1e-3
             
             
                 self.bright_siren_dictionary [event] [em_name] = {}
@@ -100,8 +100,8 @@ class H0likelihood :
     
     def likelihood_x_z_H0_single_event (self, event, H0, em_name, counterpart_z_array, redshift_bins_temp = 10000) :
     
-        zmin = self.dlGWmin*H0/self.cavl 
-        zmax = self.dlGWmax*H0/self.cavl 
+        zmin = self.dlGWmin*H0/self.cval 
+        zmax = self.dlGWmax*H0/self.cval 
             
         zGW_array_temp = np.linspace (zmin,zmax,redshift_bins_temp)
         dl_array_temp = self.cval*zGW_array_temp/H0 
