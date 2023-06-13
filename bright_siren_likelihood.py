@@ -13,7 +13,7 @@ from astropy import constants as const, units as u
 from ligo.skymap.io.fits import read_sky_map
 import pandas as pd
 import json
-
+import bilby
             
 class H0likelihood :
 
@@ -100,8 +100,8 @@ class H0likelihood :
     
     def likelihood_x_z_H0_single_event (self, event, H0, em_name, counterpart_z_array, redshift_bins_temp = 10000) :
     
-        zmin = self.dlGWmin*H0/self.cavl 
-        zmax = self.dlGWmax*H0/self.cavl 
+        zmin = self.dlGWmin*H0/self.cval 
+        zmax = self.dlGWmax*H0/self.cval 
             
         zGW_array_temp = np.linspace (zmin,zmax,redshift_bins_temp)
         dl_array_temp = self.cval*zGW_array_temp/H0 
