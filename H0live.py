@@ -78,7 +78,7 @@ class H0live :
             plt.xlim (self.H0_array[0],self.H0_array[-1])
             plt.ylim (ymin, ymax)
             plt.xlabel (r"$H_{0} {\rm \ (km\ s^{-1}\ Mpc^{-1})}$", size=15)
-            plt.ylabel (r"$p(H_{0})$", size=15)
+            plt.ylabel (r"$p(H_{0} {\rm \ (km^{-1}\ s\ Mpc)})$", size=15)
             plt.title (r"$H_{0}=%.2f^{+%.2f}_{-%.2f}\ {\rm km\ s^{-1}\ Mpc^{-1}} (%d %s {\rm CI})$"
         %(H0map, H0high-H0map, H0map-H0low, level*100, r"$%$"))
             plt.tick_params(labelsize=12, direction='in')
