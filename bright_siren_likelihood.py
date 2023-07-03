@@ -17,7 +17,26 @@ import bilby
             
 class H0likelihood :
 
-    def __init__ (self, bright_siren_information, H0min=20, H0max=140, H0bins=100, redshift_bins = 10000, filename="test.csv", zcut=None) :
+    def __init__ (self, bright_siren_information, H0min=20, H0max=140, H0bins=100, redshift_bins = 10000, filename="test.csv") :
+
+        """
+        Class to calculate likelihood on the Hubble constant
+        Parameters
+        ----------
+
+        bright_siren_information : dictionary (Json file )
+            Contain bright sirens data (electromagnetic counterpart (rac, dec, redshift ), GW data (skymap)) from GraceDB
+        H0min : Float (Default is 20)
+            Minimum value of H0 for which likelihood is computed
+        H0min : Float (Default is 140)
+            Maximum value of H0 for which likelihood is computed
+        H0bins : Integer (Default is 100)
+            Number of points to construct H0 array over which H0 likelihood would be computed
+        redshift_bins : Integer (Default is 1000)
+            Number of redshift bins to construct redshift array over which redshift posterior(?) is constructed using the elctromagnetic counterpart data stored in bright_siren_information(dictionary)
+        filename : Str (CSV File)
+            File to array of H0 and corresponding ;ikelihood for the givent events mentioned in bright_siren_information(dictionary)
+        """
 
         # Speed of light in km.s-1
         self.cval = const.c.to('km/s').value
