@@ -35,7 +35,7 @@ class H0likelihood :
         redshift_bins : Integer (Default is 1000)
             Number of redshift bins to construct redshift array over which redshift posterior(?) is constructed using the elctromagnetic counterpart data stored in bright_siren_information(dictionary)
         filename : Str (CSV File)
-            File to array of H0 and corresponding ;ikelihood for the givent events mentioned in bright_siren_information(dictionary)
+            File to save array of H0 and corresponding ;ikelihood for the givent events mentioned in bright_siren_information(dictionary)
         """
 
         # Speed of light in km.s-1
