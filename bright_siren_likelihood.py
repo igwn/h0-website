@@ -121,12 +121,17 @@ class H0likelihood :
                 if self.dlGWmin <0 :
                     self.dlGWmin = 1e-3
             
-            
+                # Define dictionary to store all necessary information to calculate H0 likelihood
                 self.bright_siren_dictionary [event] [em_name] = {}
+                # redshift array relevant to GW event
                 self.bright_siren_dictionary [event] [em_name] ["counterpart_z_array"] = counterpart_z_array
+                # EM likelihood as a function of redshift
                 self.bright_siren_dictionary [event] [em_name] ["counterpart_pdf"] = counterpart_pdf
+                # GW likelihood function as a function of luminosity distance
                 self.bright_siren_dictionary [event] [em_name] ["posterior"] = posterior_x_dl_skymap
+                # redshift prior
                 self.bright_siren_dictionary [event] [em_name] ["z_prior"] = pz
+                # luminosity distance prior
                 self.bright_siren_dictionary [event] [em_name] ["dl_prior"] = dl_prior
 
                 self.dl_out[event][em_name]={'dist_mean':distmu_los,'dist_sigma':distsigma_los}
