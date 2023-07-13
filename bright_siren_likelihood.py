@@ -103,7 +103,7 @@ class H0likelihood :
                 # Constructiong pdf of the redshift using the electromagnetic counterpart information
                 counterpart_pdf = truncnorm (a,5, counterpart_muz, counterpart_sigmaz).pdf (counterpart_z_array)
         
-                # redshift prior
+                # redshift prior approximates as z^2 for low redshift universe
                 pz = np.power(counterpart_z_array, 2)
         
                 # Posterior of luminosity distance from skymap
@@ -131,7 +131,7 @@ class H0likelihood :
                 self.bright_siren_dictionary [event] [em_name] ["posterior"] = posterior_x_dl_skymap
                 # redshift prior
                 self.bright_siren_dictionary [event] [em_name] ["z_prior"] = pz
-                # luminosity distance prior
+                # luminosity distance prior used during skymap construction
                 self.bright_siren_dictionary [event] [em_name] ["dl_prior"] = dl_prior
 
                 self.dl_out[event][em_name]={'dist_mean':distmu_los,'dist_sigma':distsigma_los}
