@@ -92,9 +92,12 @@ class H0likelihood :
                 # Identify particualar pixel in the skymap from the electromagnetic counterpart information
                 counterpart_pix = hp.ang2pix (nside, np.pi/2 - counterpart_dec, counterpart_ra, nest=True)
             
-                # counterpart information
+                # counterpart information: construction of EM likelihood, which is a Gaussian distribution
+                # mean of EM likelihood
                 counterpart_muz = bright_siren_information_dictionary [event] ['Counterparts'] [em_info] ["Parameters"] ["counterpart_cz"]/self.cval
+                # standard deviation of EM likelihood
                 counterpart_sigmaz =  bright_siren_information_dictionary [event] ['Counterparts'] [em_info] ["Parameters"] ["counterpart_sigma_cz"]/self.cval
+                # define truncated Gaussian distribution for EM likelihood 
                 a = (0.0 - counterpart_muz) / counterpart_sigmaz
                 counterpart_z_array = np.linspace (0.5*counterpart_muz, 2*counterpart_muz, redshift_bins)
                 # Constructiong pdf of the redshift using the electromagnetic counterpart information
