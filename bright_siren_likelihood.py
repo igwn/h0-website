@@ -149,7 +149,22 @@ class H0likelihood :
     #    return self.dl_out
     
     def likelihood_x_z_H0_single_event (self, event, H0, em_name, counterpart_z_array, redshift_bins_temp = 10000) :
-
+        """
+        Calculate H0 likelihood for individual event
+        Parameters
+        ----------
+        event: str
+            Name of GW event (from GraceDB)
+        H0: float
+            Value of the Hubble constant for which likelihood is computed
+        em_name: str
+            Name of EM counterpart
+        counterpart_z_array : array
+            Redshift array corresponding to EM data
+        redshift_bins_temp : int
+            No of redshift bins for calculating GW likelihood as a function of redshift 
+        """
+        
         # minimum and maximum distance of GW event at 5 sigma error for a given H0
         zmin = self.dlGWmin*H0/self.cval 
         zmax = self.dlGWmax*H0/self.cval 
@@ -168,10 +183,12 @@ class H0likelihood :
 
 
     def H0likelihood_events (self) :
+        # Calculating H0 likelihood for multiple events
 
         likelihood_dictionary = {}
 
-        # Loop over the events in the dict built in the init function
+        # Loop over the events in the dictionary, built in the init function
+        # Stroing necessary information in the dictionary, required to compute H0 likelihood
         for event in self.bright_siren_dictionary.keys () :
             for em_name in self.bright_siren_dictionary[event].keys() :
 
@@ -183,9 +200,12 @@ class H0likelihood :
 
                 for hh, H0 in enumerate (self.H0_array) :
 
+                    # Compute GW likelihood as a function of the redshift of an individual event for a particular value of H0
                     px_z_H0 = self.likelihood_x_z_H0_single_event (event, H0, em_name, counterpart_z_array_event)
+                    # Calculate H0 likelihood
                     likelihood_array [hh] = simpson (px_z_H0*zprior_event*counterpart_pdf, counterpart_z_array_event)/H0**3
 
+                # Normalize H0 likelihood
                 likelihood_array /= simpson (likelihood_array, self.H0_array)
 
                 likelihood_dictionary [f'{event}_{em_name}'] = likelihood_array
