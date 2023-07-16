@@ -92,15 +92,18 @@ class H0likelihood :
                 # Identify particualar pixel in the skymap from the electromagnetic counterpart information
                 counterpart_pix = hp.ang2pix (nside, np.pi/2 - counterpart_dec, counterpart_ra, nest=True)
             
-                # counterpart information
+                # counterpart information: construction of EM likelihood, which is a Gaussian distribution
+                # mean of EM likelihood
                 counterpart_muz = bright_siren_information_dictionary [event] ['Counterparts'] [em_info] ["Parameters"] ["counterpart_cz"]/self.cval
+                # standard deviation of EM likelihood
                 counterpart_sigmaz =  bright_siren_information_dictionary [event] ['Counterparts'] [em_info] ["Parameters"] ["counterpart_sigma_cz"]/self.cval
+                # define truncated Gaussian distribution for EM likelihood 
                 a = (0.0 - counterpart_muz) / counterpart_sigmaz
                 counterpart_z_array = np.linspace (0.5*counterpart_muz, 2*counterpart_muz, redshift_bins)
                 # Constructiong pdf of the redshift using the electromagnetic counterpart information
                 counterpart_pdf = truncnorm (a,5, counterpart_muz, counterpart_sigmaz).pdf (counterpart_z_array)
         
-                # redshift prior
+                # redshift prior approximates as z^2 for low redshift universe
                 pz = np.power(counterpart_z_array, 2)
         
                 # Posterior of luminosity distance from skymap
@@ -118,12 +121,17 @@ class H0likelihood :
                 if self.dlGWmin <0 :
                     self.dlGWmin = 1e-3
             
-            
+                # Define dictionary to store all necessary information to calculate H0 likelihood
                 self.bright_siren_dictionary [event] [em_name] = {}
+                # redshift array relevant to GW event
                 self.bright_siren_dictionary [event] [em_name] ["counterpart_z_array"] = counterpart_z_array
+                # EM likelihood as a function of redshift
                 self.bright_siren_dictionary [event] [em_name] ["counterpart_pdf"] = counterpart_pdf
+                # GW likelihood function as a function of luminosity distance
                 self.bright_siren_dictionary [event] [em_name] ["posterior"] = posterior_x_dl_skymap
+                # redshift prior
                 self.bright_siren_dictionary [event] [em_name] ["z_prior"] = pz
+                # luminosity distance prior used during skymap construction
                 self.bright_siren_dictionary [event] [em_name] ["dl_prior"] = dl_prior
 
                 self.dl_out[event][em_name]={'dist_mean':distmu_los,'dist_sigma':distsigma_los}
@@ -137,8 +145,8 @@ class H0likelihood :
     
         return
     
-    def get_distance(self):
-        return self.dl_out
+    #def get_distance(self):
+    #    return self.dl_out
     
     def likelihood_x_z_H0_single_event (self, event, H0, em_name, counterpart_z_array, redshift_bins_temp = 10000) :
 
