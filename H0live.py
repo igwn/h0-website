@@ -160,7 +160,7 @@ class H0live :
         norm = simpson(y,x) 
         return y/norm
 
-
+# The following snippet is taken from https://git.ligo.org/lscsoft/gwcosmo/-/blob/master/gwcosmo/utilities/posterior_utilities.py
 class credible_interval:
     def __init__(self, posterior, H0, level, verbose=False):
         self.posterior = posterior
