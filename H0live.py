@@ -42,23 +42,30 @@ class H0live :
             Download H0 likelihood
         """  
 
-
+        # read H0 likelihood from the existing file
         likelihood_allevents = pd.read_csv (likelihood_fname)
 
+        # H0 array over which H0 posterior is calculated
         self.H0_array = likelihood_allevents.H0.values
 
+        # select H0 likelihood for selected H0 likelihood from the file mentioned above
         likelihood_events_sel = np.zeros ([len(events), likelihood_allevents.shape[0]])
-        
+        # store selected H0 likelihood in array
         for ee, event in enumerate(events) :
             likelihood_events_sel [ee] = likelihood_allevents[event].values
-
+            
+        # combined the selected H0 likelihood to get combined H0 likelihood: perform summation of logarithms of H0 likelihoods
         log_likelihood_combined = np.sum(np.log(likelihood_events_sel), axis=0)
-    
+
+        # combined H0 likelihood from the logarithmic values
         self.likelihood_combined = np.exp(log_likelihood_combined)
+        # define H0 prior (uniform or uniform in log in scale)
         self.H0prior = H0prior
 
+        # calculate normalized combined H0 posterior
         pH0_normalized = self.probability ()
-        
+
+        # calculate the credible interval of combined H0 posterior
         CI = credible_interval (pH0_normalized, self.H0_array, level=level)
         H0low = CI.lower_level
         H0high = CI.upper_level
@@ -109,6 +116,7 @@ class H0live :
 
             st.pyplot(fig, clear_figure=True)
 
+        # download H0 likelihood data which are used to generate combined H0 posterior
         if data_download :
             self.H0data_download = pd.DataFrame( likelihood_events_sel.T, columns = events)
             self.H0data_download.insert (0, "H0", self.H0_array)
@@ -116,9 +124,14 @@ class H0live :
             
 
     def probability (self) :
-
+        """
+        Calculate combined H0 posterior depending on the choice of H0 prior
+        """
+        
+        # H0 prior is uniform
         if self.H0prior=="uniform" :
             pH0_normalized = self.normalize(self.likelihood_combined, self.H0_array)
+        # H0 prior is uniform in logarithmic scale
         elif self.H0prior=="log" : 
             pH0 = self.likelihood_combined/self.H0_array
             pH0_normalized = self.normalize(pH0, self.H0_array)
@@ -126,8 +139,14 @@ class H0live :
         return pH0_normalized
 
     def prior (self) :
+        """
+        Define H0 prior to calculate combined H0 posterior
+        """
+        
+        # H0 prior array when H0 prior is uniform
         if self.H0prior=="uniform" :
             H0prior = np.ones (self.H0_array.size)/(self.H0_array[-1]-self.H0_array[0])
+        # H0 prior array when H0 prior is uniform in logarithmic scale
         elif self.H0prior=="log" :
             invH0prior = self.H0_array*(np.log(self.H0_array[-1])-np.log(self.H0_array[0]))
             H0prior = 1/invH0prior
@@ -135,6 +154,9 @@ class H0live :
         return H0prior
     
     def normalize (self, y, x) :
+        """
+        Normalize 1d function: defined to normalize the combine H0 posterior.
+        """
         norm = simpson(y,x) 
         return y/norm
 
