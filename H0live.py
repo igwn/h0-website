@@ -19,6 +19,28 @@ _lock = RendererAgg.lock
 
 class H0live :
     def __init__ (self, events, H0prior="uniform", level=0.9, likelihood_fname="test.csv", planck=True, riess=True, likelihood_plot=True, data_download=True) :
+        """
+        Class to calculate combined H0 posterior by combining H0 likelihood for different choices of GW events and H0 prior.
+        Parameters:
+        -----------
+
+        events: list
+            List of GW events
+        H0prior : str
+            Prior over H0 to calculate H0 posterior. Default is uniform prior. Log prior is also available.
+        level : float
+            Credible interval for combined H0 posterior.
+        likelihood_fname : str
+            File name where H0 likelohoods for all available GW  events are stored.
+        planck : bool (Default True)
+            Plot plack H0 uncertainity region.
+        riess : bool (Default True)
+            Plot SH0E et al. H0 uncertainity region.
+        likelihood_plot : bool (Default True)
+            Plot H0 likelihood for individual event.
+        data_download : bool (Default True)
+            Download H0 likelihood
+        """  
 
 
         likelihood_allevents = pd.read_csv (likelihood_fname)
