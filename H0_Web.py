@@ -6,7 +6,6 @@ Luis Miguel Galvis E
 
 #Libraries
 import streamlit as st
-from streamlit_modal import Modal
 from PIL import Image
 from H0live import *
 from numpy import where,array
@@ -95,12 +94,12 @@ with sb.form("My form"):
     choice = st.selectbox("**Prior**",prior_list) 
 
 #To select additional H0 estimates and the plot of Individual event likelihoods 
-    st.subheader("Additional values")
-    add_values=['Planck H0 estimate⁺ [1]', 'SH0ES H0 estimate⁺ [2]', 'Individual event likelihoods']
-    add_values_choice=[]
-    for i in range(len(add_values)):
-        add_values_choice.append(st.checkbox(add_values[i])) 
-
+    st.subheader("Additional options")
+    planck_checkbox = st.checkbox('Planck H0 estimate',help='Planck Collaboration. *Planck 2018 results VI. Cosmological parameters*. **A&A** 641, A6 (2020). [https://doi.org/10.1051/0004-6361/201833910](https://doi.org/10.1051/0004-6361/201833910)')
+    sh0es_checkbox = st.checkbox('SH0ES H0 estimate',help='Riess, A. G., Casertano, S., Yuan, W., Macri, L. M., and Scolnic, D. *Large Magellanic Cloud Cepheid Standards Provide a 1% Foundation for the Determination of the Hubble Constant and Stronger Evidence for Physics beyond ΛCDM*. **The Astrophysical Journal** 876, no. 1 (2019). [https://doi.org/10.3847/1538-4357/ab1422](https://doi.org/10.3847/1538-4357/ab1422)')
+    indivual_likelihoods_checkbox = st.checkbox('Individual event likelihoods')
+    add_options_choice=[planck_checkbox,sh0es_checkbox,indivual_likelihoods_checkbox]
+    
 
 
 #To create the list of events and their counterparts chosen
@@ -129,7 +128,7 @@ else:
     if not Calculated and st.session_state.object is None:
         # choice_list2.append(str(Events[0])+"_"+str(dictionary[Events[0]][0]))
         choice_list2.append(ev_list.getcolumn(Events[0],str(Counterpart_in_selectbox[0])))
-        h0live_output=H0live(choice_list2, choice,planck=add_values_choice[0],riess=add_values_choice[1],likelihood_plot=add_values_choice[2],data_download=True,likelihood_fname=csvfile)
+        h0live_output=H0live(choice_list2, choice,planck=add_options_choice[0],riess=add_options_choice[1],likelihood_plot=add_options_choice[2],data_download=True,likelihood_fname=csvfile)
         csv = h0live_output.H0data_download.to_csv(index=False)
                 
         sb.download_button(
@@ -140,7 +139,7 @@ else:
         key='download-csv')  
 #If events are selected
     if Calculated:
-        st.session_state.object=H0live(choice_list1, choice,planck=add_values_choice[0],riess=add_values_choice[1],likelihood_plot=add_values_choice[2],data_download=True,likelihood_fname=csvfile)
+        st.session_state.object=H0live(choice_list1, choice,planck=add_options_choice[0],riess=add_options_choice[1],likelihood_plot=add_options_choice[2],data_download=True,likelihood_fname=csvfile)
         csv = st.session_state.object.H0data_download.to_csv(index=False)
         a=sb.download_button(
         "Download data",
@@ -151,7 +150,7 @@ else:
         
 #To work outside of form without disappearing the image
     if not Calculated and st.session_state.object is not None:
-        h0live_output=H0live(choice_list1, choice,planck=add_values_choice[0],riess=add_values_choice[1],likelihood_plot=add_values_choice[2],data_download=True,likelihood_fname=csvfile)
+        h0live_output=H0live(choice_list1, choice,planck=add_options_choice[0],riess=add_options_choice[1],likelihood_plot=add_options_choice[2],data_download=True,likelihood_fname=csvfile)
         csv = h0live_output.H0data_download.to_csv(index=False)
         b=sb.download_button(
         "Download data",
@@ -159,30 +158,6 @@ else:
         "file.csv",
         "text/csv",
         key='download-csv')  
-
-modal = Modal(key="Demo key", title="References")
-if sb.button('More information⁺'):
-    with modal.container():
-        st.markdown('[1] Planck Collaboration. *Planck 2018 results VI. Cosmological parameters*. **A&A** 641, A6 (2020). [https://doi.org/10.1051/0004-6361/201833910](https://doi.org/10.1051/0004-6361/201833910) ')
-        st.markdown('[2] Riess, A. G., Casertano, S., Yuan, W., Macri, L. M., and Scolnic, D. *Large Magellanic Cloud Cepheid Standards Provide a 1% Foundation for the Determination of the Hubble Constant and Stronger Evidence for Physics beyond ΛCDM*. **The Astrophysical Journal** 876, no. 1 (2019). [https://doi.org/10.3847/1538-4357/ab1422](https://doi.org/10.3847/1538-4357/ab1422)')
-
-# To add the information about the website
-#sb.header("Related information")
-#sb.subheader("What is $H_0$?")
-#sb.markdown(r"""$H_0$ is a cosmological parameter which measure 
-#            the speed of the expansion of the Universe""")
-
-#sb.subheader("How can we  estimate $H_0$ with bright sirens?")
-#sb.markdown(r"""
-#Bright sirens are astrophysical systems producing detectable electromagnetic (EM) and gravitational waves (GW), allowing to estimate their redshift, using EM observations, and distance, using GW observations.
-#At low redshift H_0 is approximately the inverse of slope of the distance-redshift relation, also known as the Hubble diagram.
-#               """)
-
-#sb.markdown(
-#    "What are [LIGO](https://www.ligo.org/about.php), [Virgo](https://www.virgo-gw.eu/) and [KAGRA](https://gwcenter.icrr.u-tokyo.ac.jp/en/)?")
-
-#sb.markdown(
-#    "How can GW be used to estimate H0? : [Measuring the Expansion of the Universe with Gravitational Waves](https://www.ligo.org/science/Publication-GW170817Hubble/)")
 
 st.markdown("""
             **Did you know that gravitational waves can be used to measure the expansion of the Universe? 
@@ -253,14 +228,3 @@ st.markdown("""
             If you find an issue with the website, please report it on the Github repository 
             [H0WEBSITE](https://github.com/SergioVallejoP/H0WEBSITE).
             """)
-
-
-#st.divider()
-#st.subheader("How to use the H0 calculator?")
-#st.markdown("""On the left you can choose which gravitational wave event and 
-#            corresponding electromagnetic counterpart  to use to estimate H0. 
-#            Once you have selected the GW events with the checkbox, for GW events with more than 
-#            one EM counterpart, you can choose between the different counterparts using the dropdown 
-#            menu.
-#            The plot shows the posterior obtained from combining the different 
-#            likelihoods corresponding to the GW event EM counterpart combinations you have chosen.""")

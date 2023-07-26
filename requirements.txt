@@ -13,7 +13,6 @@ plotly==5.11.0
 requests==2.25.1
 scipy==1.8.1
 streamlit==1.22.0
-streamlit-modal==0.1.0
 ligo.skymap==1.0.3
 seaborn==0.12.2
 ligo.gracedb==2.10.0
