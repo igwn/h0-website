@@ -145,8 +145,9 @@ class H0likelihood :
     
         return
     
-    #def get_distance(self):
-    #    return self.dl_out
+    def get_distance(self):
+       #used by process_events
+       return self.dl_out
     
     def likelihood_x_z_H0_single_event (self, event, H0, em_name, counterpart_z_array, redshift_bins_temp = 10000) :
         """
