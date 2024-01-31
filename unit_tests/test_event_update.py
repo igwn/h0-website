@@ -27,6 +27,7 @@ Documentation:
     2. Changes can be made manually to events-list.json with EM counterparts (with PR)
         a. Check if EM counterpart have been added to events-list.json
         b. If EM counterpart, check if sky position is the same as associated GW event
+        c. Run the H0 code to update streamlit website
 
 """
 
