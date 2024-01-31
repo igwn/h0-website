@@ -21,10 +21,12 @@ Github Repository: https://github.com/igwn/h0-website/tree/continuous-integratio
 Changes have not been merged into main yet.
 
 Documentation:
-    1. Changes from grace-db can come in via periodic bg processes
-        a. This need not be checked with tests? Assuming trustworthiness.
-    2. Changes can be made manually to events-list.json with EM counterparts
-        a. If pushing an EM counterpart manually, run tests?
+    When paired when CI, checks are run when merging with main branch
+    1. Changes from grace-db can come in via periodic bg processes (without PR)
+        a. Check event updates (potential/GW) in events-list.json
+    2. Changes can be made manually to events-list.json with EM counterparts (with PR)
+        a. Check if EM counterparts have been added to events-list.json
+        b. If EM counterparts, check if sky position is the same as associated GW event
 
 """
 
