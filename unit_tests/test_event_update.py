@@ -20,7 +20,11 @@ __status__      = [*inProgress*, 'Archived', 'inUsage', 'Debugging']
 Github Repository: https://github.com/igwn/h0-website/tree/continuous-integration
 Changes have not been merged into main yet.
 
-Documentation: NULL
+Documentation:
+    1. Changes from grace-db can come in via periodic bg processes
+        a. This need not be checked with tests? Assuming trustworthiness.
+    2. Changes can be made manually to events-list.json with EM counterparts
+        a. If pushing an EM counterpart manually, run tests?
 
 """
 
