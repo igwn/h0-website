@@ -25,15 +25,17 @@ Documentation:
     1. Changes from grace-db can come in via periodic bg processes (without PR)
         a. Check event updates (potential/GW) in events-list.json
     2. Changes can be made manually to events-list.json with EM counterparts (with PR)
-        a. Check if EM counterparts have been added to events-list.json
-        b. If EM counterparts, check if sky position is the same as associated GW event
+        a. Check if EM counterpart have been added to events-list.json
+        b. If EM counterpart, check if sky position is the same as associated GW event
 
 """
 
 ## Packages
 ## TODO: Need to update requirements.txt
 import os
+import re
 import json
+import difflib
 # Limitations: Cannot be used in daemon-like processes
 from git import Repo
 
@@ -61,6 +63,31 @@ def test_attached_head():
     assert not repo.head.is_detached
 
 
+def test_event_updates():
+    # Check if automagic event update has occurred from grace-db bg process
+    hcommit = repo.head.commit
+    #print(hcommit.diff())  # diff tree against index
+    # diff tree against previous tree
+    # Traverse added Diff objects only
+    for diff_item in hcommit.diff("HEAD~1").iter_change_type("M"):
+        a_blob = diff_item.a_blob.data_stream.read().decode('utf-8')
+        b_blob = diff_item.b_blob.data_stream.read().decode('utf-8')
+
+    print(len(a_blob[:]))
+    print(len(b_blob[:]))
+
+    log = repo.git.diff('--numstat', 'HEAD~1')
+    for line in log.split('\n'):
+        is_added = re.match(r"(\d+)\s+(\d+)\s+(.+)", line)[1]
+
+    matcher = difflib.SequenceMatcher(a=a_blob, b=b_blob)
+    diff = []
+
+    if is_added:
+        for match in matcher.get_matching_blocks():
+            print(a_blob[match.a: match.size])
+
+
 def test_git_push():
     # Check if a successful git push occurred
     check_file = os.path.join(working_tree_dir, "events-list.json")
@@ -71,7 +98,7 @@ def test_git_push():
     if check_file in repo.untracked_files:
         pass
     elif check_file in changed:
-        return "modified"
+        pass
     else:
         pass
 
