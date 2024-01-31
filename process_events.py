@@ -115,11 +115,15 @@ class EventsList:
             # get EM counterpart data
             event["Counterparts"]={}
             N_em=0
-            for emid in events_list[ev]["EM"]:
+            for nem in range(len(events_list[ev]["EM"])):
+                emid=events_list[ev]["EM"][nem].get("name","")
                 if not emid in emdata:
                     pass
                 else:
                     event["Counterparts"][emid]=emdata[emid]
+                    evtype=events_list[ev]["EM"][nem].get("type","")
+                    if evtype!="":
+                        event["Counterparts"][emid]["display_name"]="{} ({})".format(event["Counterparts"][emid]["display_name"],evtype)
                     # convert parameters
                     try:
                         paramsOut={}

@@ -76,7 +76,9 @@ Counterpart_in_selectbox=[]
 with sb.form("My form"):
 #To select the events and their counterparts
     st.subheader("Events and counterparts")
-    st.markdown("""Select the GW events you want to include, and its EM counterpart:""")
+    st.markdown("""**Gravitational wave events:** Gravitational wave events are named starting with the prefix GW, while observations that trigger an event alert but have not (yet) been published are named starting with the prefix S.""")
+    st.markdown("""**Electromagnetic counterparts:** Electromagnetic counterpart associations to a gravitational wave event will be labelled as "potential" until confirmed in an LVK publication.""")
+    st.markdown("""**Select the GW events you want to include, and its EM counterpart:**""")
     for key in dictionary:
         if Events_in_checbox==[] and Counterpart_in_selectbox==[]:
             Events_in_checbox.append(st.checkbox(key,True))

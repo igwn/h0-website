@@ -2,11 +2,11 @@
     "H0events":{
         "GW170817":{
             "GW":"GW170817",
-            "EM":["NGC4993","ESO508-24"]
+            "EM":[{"name":"NGC4993","type":""},{"name":"ESO508-24","type":"fake"}]
         },
         "GW190425":{
             "GW":"GW190425",
-            "EM":["FRB20190425A"]
+            "EM":[{"name":"FRB20190425A","type":"potential"}]
         }
     },
     "GW_data":{
@@ -38,7 +38,7 @@
         "ESO508-24":{
             "src":"local",
             "id":"ESO508-24",
-            "display_name":"ESO 508-24 (FAKE)",
+            "display_name":"ESO 508-24",
             "cz_mean":3851,
             "cz_sigma":0.1,
             "ra_deg":197.69140,

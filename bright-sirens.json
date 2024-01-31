@@ -28,7 +28,7 @@
       "ESO508-24": {
         "src": "local",
         "id": "ESO508-24",
-        "display_name": "ESO 508-24 (FAKE)",
+        "display_name": "ESO 508-24 (fake)",
         "cz_mean": 3851,
         "cz_sigma": 0.1,
         "ra_deg": 197.6914,
@@ -52,7 +52,7 @@
     "display_name": "GW190425",
     "reference": "https://doi.org/10.7935/qf3a-3z67",
     "gracedb_meta": {
-      "retrieved": "2023-04-17T00:20:33.722",
+      "retrieved": "2024-01-23T19:08:48.395",
       "src": "https://gracedb.ligo.org/api/",
       "vonum": 2
     },
@@ -61,7 +61,7 @@
       "FRB20190425A": {
         "src": "local",
         "id": "FRB20190425A",
-        "display_name": "FRB 20190425A",
+        "display_name": "FRB 20190425A (potential)",
         "cz_mean": 9360,
         "cz_sigma": 3,
         "ra_deg": 255.72,
